@@ -2,7 +2,7 @@ const express = require("express")
 
 const app = express()
 
-app.use('/'. require('./src/routes'))
+app.use('/', require('./src/routes'))
 
 app.get('/', (req, res) => {
     return res.status(200).send("backend running")
