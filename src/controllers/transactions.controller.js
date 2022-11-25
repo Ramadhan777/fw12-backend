@@ -1,20 +1,20 @@
-const {insertUser, selectAllUsers, selectUser, patchUser, deleteUser} = require('../models/users.model')
+const {insertTransaction, selectAllTransactions, selectTransaction, patchTransaction, deleteTransaction} = require('../models/Transactions.model')
 const errorHandler = require('../helpers/errorHandler')
 
-exports.readAllUsers = (req, res) => {
-  selectAllUsers((error, data) => {
+exports.readAllTransactions = (req, res) => {
+  selectAllTransactions((error, data) => {
     if(error){
       return errorHandler(error, res)
     }
     return res.status(200).json({
       success: true,
-      users: data.rows
+      transactions: data.rows
     })
   })
 }
 
-exports.readUser = (req, res) => {
-  selectUser(req.params, (error, data) => {
+exports.readTransaction = (req, res) => {
+  selectTransaction(req.params, (error, data) => {
     if(error){
       return errorHandler(error, res)
     }
@@ -22,32 +22,32 @@ exports.readUser = (req, res) => {
     if(data.rows.length === 0){
       return res.status(500).json({
         success: false,
-        message: "User not found"
+        message: "Transaction not found"
       })
     }
 
     return res.status(200).json({
       success: true,
-      user: data.rows
+      transaction: data.rows
     })
   })
 }
 
-exports.createUser = (req, res) => {
-  insertUser(req.body, (error, data) => {
+exports.createTransaction = (req, res) => {
+  insertTransaction(req.body, (error, data) => {
     if(error){
       return errorHandler(error, res)
     }
     return res.status(200).json({
       success: true,
-      message: "User created successfully",
-      user: data.rows[0]
+      message: "Transaction created successfully",
+      transaction: data.rows[0]
     })
     })
 }
 
-exports.updateUser = (req,  res) => {
-  patchUser(req.body, req.params, (error, data) => {
+exports.updateTransaction = (req,  res) => {
+  patchTransaction(req.body, req.params, (error, data) => {
     if(error){
       return errorHandler(error, res)
     }
@@ -55,20 +55,20 @@ exports.updateUser = (req,  res) => {
     if(data.rows.length === 0){
       return res.status(400).json({
         success: false,
-        message: "User doesn't exist"
+        message: "Transaction doesn't exist"
       })
     }
 
     return res.status(200).json({
       success: true,
-      message: "User Updated",
-      user : data.rows
+      message: "Transaction Updated",
+      Transaction : data.rows
     })
   })
 }
 
-exports.deleteUser = (req, res) => {
-  deleteUser(req.params, (error, data) => {
+exports.deleteTransaction = (req, res) => {
+  deleteTransaction(req.params, (error, data) => {
     if(error){
       return errorHandler(error, res)
     }
@@ -76,14 +76,14 @@ exports.deleteUser = (req, res) => {
     if(data.rows.length === 0){
       return res.status(500).json({
         success: false,
-        message: "User doesn't exist"
+        message: "Transaction doesn't exist"
       })
     }
 
     return res.status(200).json({
       success: true,
-      message: "User Deleted",
-      user: data.rows
+      message: "Transaction Deleted",
+      transaction: data.rows
     })
   })
 }
