@@ -17,7 +17,7 @@ exports.insertMovieSchedulesTime = (data, callback) => {
 }
 
 exports.patchUser = (data, param, callback) => {
-  const sql = `UPDATE "movieSchedulesTimes" SET "time"=$1, "movieScheduleId"=$2 WHERE id=$3 RETURNING *`;
+  const sql = `UPDATE "movieSchedulesTimes" SET "time"=COALESCE(NULLIF($1,'00:00:00'::time), "time"), "movieScheduleId"=COALESCE(NULLIF($2,0), "movieScheduleId") WHERE id=$3 RETURNING *`;
 
   const values = [data.time, data.movieScheduleId, param.id]
 

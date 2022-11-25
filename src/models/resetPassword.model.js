@@ -17,7 +17,7 @@ exports.insertResetPassword = (data, callback) => {
 }
 
 exports.patchResetPassword = (data, param, callback) => {
-  const sql = `UPDATE "resetPassword" SET "email"=$1, "userId"=$2, "code"=$3 WHERE id=$4 RETURNING *`
+  const sql = `UPDATE "resetPassword" SET "email"=COALESCE(NULLIF($1,''), "email"), "userId"=COALESCE(NULLIF($2, 0), "userId"), "code"=COALESCE(NULLIF($3,''), "code") WHERE id=$4 RETURNING *`
 
   const values = [data.email, data.userId, data.code, param.id]
 

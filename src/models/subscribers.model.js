@@ -17,7 +17,7 @@ exports.insertSubscriber = (data, callback) => {
 }
 
 exports.patchSubscriber = (data, param, callback) => {
-  const sql = `UPDATE subscribers SET "email"=$1 WHERE id=$2 RETURNING *`
+  const sql = `UPDATE subscribers SET "email"=COALESCE(NULLIF($1,''), "email") WHERE id=$2 RETURNING *`
 
   const values = [data.email, param.id]
 

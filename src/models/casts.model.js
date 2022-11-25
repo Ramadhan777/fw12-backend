@@ -17,7 +17,7 @@ exports.insertCast = (data, callback) => {
 }
 
 exports.patchCast = (data, param, callback) => {
-  const sql = `UPDATE casts SET "name"=$1 WHERE id=$2 RETURNING *`
+  const sql = `UPDATE casts SET "name"=COALESCE(NULLIF($1,''), "name") WHERE id=$2 RETURNING *`
 
   const values = [data.name, param.id]
 

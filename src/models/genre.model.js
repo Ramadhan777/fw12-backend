@@ -17,7 +17,7 @@ exports.insertGenre = (data, callback) => {
 }
 
 exports.patchGenre = (data, param, callback) => {
-  const sql = `UPDATE genre SET "name"=$1 WHERE id=$2 RETURNING *`
+  const sql = `UPDATE genre SET "name"=COALESCE(NULLIF($1,''), "name") WHERE id=$2 RETURNING *`
 
   const values = [data.name, param.id]
 

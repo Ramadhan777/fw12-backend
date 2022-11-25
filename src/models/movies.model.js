@@ -17,7 +17,7 @@ exports.insertMovie = (data, callback) => {
 }
 
 exports.patchUser = (data, param, callback) => {
-  const sql = `UPDATE movies SET "title"=$1, "picture"=$2, "releaseDate"=$3, "director"=$4, "duration"=$5, "synopsis"=$6 WHERE id=$7 RETURNING *`;
+  const sql = `UPDATE movies SET "title"=COALESCE(NULLIF($1,''), "title"), "picture"=COALESCE(NULLIF($2,''), "picture"), "releaseDate"=COALESCE(NULLIF($3, '1970-01-01'::timestamptz), "releaseDate"), "director"=COALESCE(NULLIF($4,''), "director"), "duration"=COALESCE(NULLIF($5, '00:00:00'::time), "duration"), "synopsis"=COALESCE(NULLIF($6,''), "synopsis") WHERE id=$7 RETURNING *`;
 
   const values = [data.title, data.picture, data.releaseDate, data.director, data.duration, data.synopsis, param.id]
 

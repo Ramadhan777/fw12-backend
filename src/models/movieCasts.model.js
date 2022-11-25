@@ -17,7 +17,7 @@ exports.insertMovieCast = (data, callback) => {
 }
 
 exports.patchMovieCast = (data, param, callback) => {
-  const sql = `UPDATE "movieCasts" SET "movieId"=$1, "castsId"=$2 WHERE id=$3 RETURNING *`
+  const sql = `UPDATE "movieCasts" SET "movieId"=COALESCE(NULLIF($1,0), "movieId"), "castsId"=COALESCE(NULLIF($2,0), "castsId") WHERE id=$3 RETURNING *`
 
   const values = [data.movieId, data.castsId, param.id]
 

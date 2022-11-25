@@ -17,7 +17,7 @@ exports.insertStatus = (data, callback) => {
 }
 
 exports.patchStatus = (data, param, callback) => {
-  const sql = `UPDATE status SET "name"=$1 WHERE id=$2 RETURNING *`
+  const sql = `UPDATE status SET "name"=COALESCE(NULLIF($1,''), "name") WHERE id=$2 RETURNING *`
 
   const values = [data.name, param.id]
 

@@ -17,7 +17,7 @@ exports.insertReservedSeat = (data, callback) => {
 }
 
 exports.patchUser = (data, param, callback) => {
-  const sql = `UPDATE "reservedSeat" SET "seatNum"=$1, "transactionId"=$2 WHERE id=$3 RETURNING *`;
+  const sql = `UPDATE "reservedSeat" SET "seatNum"=COALESCE(NULLIF($1,''), "seatNum"), "transactionId"=COALESCE(NULLIF($2,0), "transactionId") WHERE id=$3 RETURNING *`;
 
   const values = [data.seatNum, data.transactionId, param.id]
 

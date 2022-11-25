@@ -17,7 +17,7 @@ exports.insertCinema = (data, callback) => {
 }
 
 exports.patchCinema = (data, param, callback) => {
-  const sql = `UPDATE cinemas SET "picture"=$1, "name"=$2, "address"=$3, "city"=$4 WHERE id=$5 RETURNING *`
+  const sql = `UPDATE cinemas SET "picture"=COALESCE(NULLIF($1,''), "picture"), "name"=COALESCE(NULLIF($2,''), "name"), "address"=COALESCE(NULLIF($3,''), "address"), "city"=COALESCE(NULLIF($4,''), "city") WHERE id=$5 RETURNING *`
 
   const values = [data.picture, data.name, data.address, data.city, param.id]
 

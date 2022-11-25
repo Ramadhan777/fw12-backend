@@ -17,7 +17,7 @@ exports.insertUser = (data, callback) => {
 }
 
 exports.patchUser = (data, param, callback) => {
-  const sql = `UPDATE users SET "firstName"=$1, "lastName"=$2, "phoneNumber"=$3, "email"=$4, "password"=$5 WHERE id=$6 RETURNING *`;
+  const sql = `UPDATE users SET "firstName"=COALESCE(NULLIF($1,''), "firstName"), "lastName"=COALESCE(NULLIF($2,''), "lastName"), "phoneNumber"=COALESCE(NULLIF($3, ''), "phoneNumber"), "email"=COALESCE(NULLIF($4, ''), "email"), "password"=COALESCE(NULLIF($5,''), "password")  WHERE id=$6 RETURNING *`;
 
   const values = [data.firstName, data.lastName, data.phoneNumber, data.email, data.password, param.id]
 

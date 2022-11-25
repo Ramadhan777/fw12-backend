@@ -17,7 +17,7 @@ exports.insertTransaction = (data, callback) => {
 }
 
 exports.patchTransaction = (data, param, callback) => {
-  const sql = `UPDATE transactions SET "bookingDate"=$1, "movieId"=$2, "cinemaId"=$3, "movieScheduleID"=$4, "fullName"=$5, "email"=$6, "phoneNumber"=$7, "statusId"=$8 WHERE id=$9 RETURNING *`;
+  const sql = `UPDATE transactions SET "bookingDate"=COALESCE(NULLIF($1,'1970-01-01'::TIMESTAMPTZ), "bookingDate"), "movieId"=COALESCE(NULLIF($2,0), "movieId"), "cinemaId"=COALESCE(NULLIF($3,0), "cinemaId"), "movieScheduleID"=COALESCE(NULLIF($4,0), "movieScheduleID"), "fullName"=COALESCE(NULLIF($5,''), "fullName"), "email"=COALESCE(NULLIF($6,''), "email"), "phoneNumber"=COALESCE(NULLIF($7,''), "phoneNumber"), "statusId"=COALESCE(NULLIF($8,0), "statusId") WHERE id=$9 RETURNING *`;
 
   const values = [data.bookingDate, data.movieId, data.cinemaId, data.movieScheduleID, data.fullName, data.email, data.phoneNumber, data.statusId, param.id]
 
