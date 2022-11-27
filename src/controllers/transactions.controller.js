@@ -1,14 +1,48 @@
-const {insertTransaction, selectAllTransactions, selectTransaction, patchTransaction, deleteTransaction} = require('../models/Transactions.model')
+const {insertTransaction, selectAllTransactions, selectTransaction, patchTransaction, deleteTransaction, countAllTransactions} = require('../models/Transactions.model')
 const errorHandler = require('../helpers/errorHandler')
 
 exports.readAllTransactions = (req, res) => {
-  selectAllTransactions((error, data) => {
-    if(error){
-      return errorHandler(error, res)
+
+  req.query.page = parseInt(req.query.page) || 1
+  req.query.limit = parseInt(req.query.limit) || 5
+  req.query.search = req.query.search || ''
+  const sortable = ['bookingDate','email','fullname','movieId', 'cinemaId', 'createdAt', 'updatedAt']
+  req.query.sortBy = (sortable.includes(req.query.sortBy) && req.query.sortBy) || 'createdAt'
+  req.query.sort = req.query.sort || 'ASC'
+
+  const filter = {
+    limit: req.query.limit,
+    offset: (parseInt(req.query.page - 1)) * req.query.limit,
+    search: req.query.search,
+    sort: req.query.sort,
+    sortBy: req.query.sortBy
+  }
+
+  const pageInfo = {
+    page: req.query.page
+  }
+
+  countAllTransactions(filter, (err, data) => {
+    if(err) {
+      return errorHandler(err, res)
     }
-    return res.status(200).json({
-      success: true,
-      transactions: data.rows
+
+    pageInfo.totalData = parseInt(data.rows[0].totalData)
+    pageInfo.totalPage = Math.ceil(pageInfo.totalData / req.query.limit)
+    pageInfo.nextPage = req.query.page < pageInfo.totalPage ? req.query.page + 1: null
+    pageInfo.prevPage = req.query.page > 1 ? req.query.page - 1: null
+
+
+    selectAllTransactions(filter, (err, result) => {
+      if(err){
+        return errorHandler(err, res)
+      }
+
+      return res.status(200).json({
+        success: true,
+        pageInfo,
+        casts: result.rows
+      })
     })
   })
 }

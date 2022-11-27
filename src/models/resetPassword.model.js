@@ -1,7 +1,19 @@
 const db = require('../helpers/db.helper')
 
-exports.selectAllResetPasswords = (callback) => {
-  return db.query(`SELECT * FROM "resetPassword"`, callback)
+exports.selectAllResetPasswords = (filter, callback) => {
+  const sql = `SELECT * FROM "resetPassword" WHERE email LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $2 OFFSET $3`
+
+  const values = [`%${filter.search}%`, filter.limit, filter.offset]
+
+  return db.query(sql, values, callback)
+}
+
+exports.countAllResetPasswords = (filter, callback) => {
+  const sql = `SELECT COUNT(*) AS "totalData" FROM "resetPassword" WHERE email LIKE $1`
+
+  const values = [`%${filter.search}%`]
+
+  return db.query(sql, values, callback)
 }
 
 exports.selectResetPassword = (param, callback) => {

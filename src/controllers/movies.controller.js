@@ -1,15 +1,48 @@
-const { selectAllMovies, selectMovie, insertMovie, patchUser, deleteMovie } = require('../models/movies.model')
+const { selectAllMovies, selectMovie, insertMovie, patchUser, deleteMovie, countAllMovies } = require('../models/movies.model')
 const errorHandler = require('../helpers/errorHandler')
 
 exports.readAllMovies = (req, res) => {
-  selectAllMovies((err, data) => {
-    if(err){
+
+  req.query.page = parseInt(req.query.page) || 1
+  req.query.limit = parseInt(req.query.limit) || 5
+  req.query.search = req.query.search || ''
+  const sortable = ['title', 'releaseDate', 'director', 'duration', 'createdAt', 'updatedAt']
+  req.query.sortBy = (sortable.includes(req.query.sortBy) && req.query.sortBy) || 'createdAt'
+  req.query.sort = req.query.sort || 'ASC'
+
+  const filter = {
+    limit: req.query.limit,
+    offset: (parseInt(req.query.page - 1)) * req.query.limit,
+    search: req.query.search,
+    sort: req.query.sort,
+    sortBy: req.query.sortBy
+  }
+
+  const pageInfo = {
+    page: req.query.page
+  }
+
+  countAllMovies(filter, (err, data) => {
+    if(err) {
       return errorHandler(err, res)
     }
 
-    return res.status(200).json({
-      success: true,
-      movies: data.rows
+    pageInfo.totalData = parseInt(data.rows[0].totalData)
+    pageInfo.totalPage = Math.ceil(pageInfo.totalData / req.query.limit)
+    pageInfo.nextPage = req.query.page < pageInfo.totalPage ? req.query.page + 1: null
+    pageInfo.prevPage = req.query.page > 1 ? req.query.page - 1: null
+
+
+    selectAllMovies(filter, (err, result) => {
+      if(err){
+        return errorHandler(err, res)
+      }
+
+      return res.status(200).json({
+        success: true,
+        pageInfo,
+        casts: result.rows
+      })
     })
   })
 }

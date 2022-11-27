@@ -1,7 +1,18 @@
 const db = require('../helpers/db.helper')
 
-exports.selectAllMovies = (callback) => {
-  return db.query('SELECT * FROM movies', callback)
+exports.selectAllMovies = (filter, callback) => {
+  const sql = `SELECT * FROM movies WHERE title LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $2 OFFSET $3`
+
+  const values = [`%${filter.search}%`, filter.limit, filter.offset]
+
+  return db.query(sql, values, callback)}
+
+exports.countAllMovies = (filter, callback) => {
+  const sql = `SELECT COUNT(*) AS "totalData" FROM movies WHERE title LIKE $1`
+
+  const values = [`%${filter.search}%`]
+
+  return db.query(sql, values, callback)
 }
 
 exports.selectMovie = (param, callback) => {

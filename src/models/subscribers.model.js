@@ -1,7 +1,19 @@
 const db = require('../helpers/db.helper')
 
-exports.selectAllSubscribers = (callback) => {
-  return db.query(`SELECT * FROM subscribers`, callback)
+exports.selectAllSubscribers = (filter, callback) => {
+  const sql = `SELECT * FROM subscribers WHERE email LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $2 OFFSET $3`
+
+  const values = [`%${filter.search}%`, filter.limit, filter.offset]
+
+  return db.query(sql, values, callback)
+}
+
+exports.countAllSubscribers = (filter, callback) => {
+  const sql = `SELECT COUNT(*) AS "totalData" FROM subscribers WHERE email LIKE $1`
+
+  const values = [`%${filter.search}%`]
+
+  return db.query(sql, values, callback)
 }
 
 exports.selectSubscriber = (param, callback) => {

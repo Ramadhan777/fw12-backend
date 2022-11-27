@@ -1,7 +1,19 @@
 const db = require('../helpers/db.helper')
 
-exports.selectAllMovieSchedules = (callback) => {
-  return db.query('SELECT * FROM "movieSchedules"', callback)
+exports.selectAllMovieSchedules = (filter, callback) => {
+  const sql = `SELECT * FROM "movieSchedules" WHERE "movieId"::VARCHAR LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $2 OFFSET $3`
+
+  const values = [`%${filter.search}%`, filter.limit, filter.offset]
+
+  return db.query(sql, values, callback)
+}
+
+exports.countAllMovieSchedules = (filter, callback) => {
+  const sql = `SELECT COUNT(*) AS "totalData" FROM "movieSchedules" WHERE "movieId"::VARCHAR LIKE $1`
+
+  const values = [`%${filter.search}%`]
+
+  return db.query(sql, values, callback)
 }
 
 exports.selectMovieSchedule = (param, callback) => {

@@ -1,7 +1,19 @@
 const db = require('../helpers/db.helper')
 
-exports.selectAllTransactions = (callback) => {
-  return db.query('SELECT * FROM transactions', callback)
+exports.selectAllTransactions = (filter, callback) => {
+  const sql = `SELECT * FROM transactions WHERE "fullName" LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $2 OFFSET $3`
+
+  const values = [`%${filter.search}%`, filter.limit, filter.offset]
+
+  return db.query(sql, values, callback)
+}
+
+exports.countAllTransactions = (filter, callback) => {
+  const sql = `SELECT COUNT(*) AS "totalData" FROM transactions WHERE "fullName" LIKE $1`
+
+  const values = [`%${filter.search}%`]
+
+  return db.query(sql, values, callback)
 }
 
 exports.selectTransaction = (data, callback) => {
