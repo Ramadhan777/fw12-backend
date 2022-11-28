@@ -49,6 +49,7 @@ exports.readAllUsers = (req, res) => {
 
 exports.readUser = (req, res) => {
   selectUser(req.params, (error, data) => {
+    console.log(data)
     if(error){
       return errorHandler(error, res)
     }
