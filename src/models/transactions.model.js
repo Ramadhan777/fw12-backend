@@ -17,7 +17,11 @@ exports.countAllTransactions = (filter, callback) => {
 }
 
 exports.selectTransaction = (data, callback) => {
-  return db.query(`SELECT * FROM transactions WHERE id=${data.id}`, callback)
+  const sql = `SELECT * FROM transactions WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertTransaction = (data, callback) => {
@@ -37,5 +41,9 @@ exports.patchTransaction = (data, param, callback) => {
 }
 
 exports.deleteTransaction = (param, callback) => {
-  return db.query(`DELETE FROM transactions WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM transactions WHERE id=$1 RETURNING *`
+  
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

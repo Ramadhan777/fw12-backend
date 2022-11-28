@@ -17,7 +17,11 @@ exports.countAllResetPasswords = (filter, callback) => {
 }
 
 exports.selectResetPassword = (param, callback) => {
-  return db.query(`SELECT * FROM "resetPassword" WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM "resetPassword" WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertResetPassword = (data, callback) => {

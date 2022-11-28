@@ -17,7 +17,11 @@ exports.countAllMovieSchedules = (filter, callback) => {
 }
 
 exports.selectMovieSchedule = (param, callback) => {
-  return db.query(`SELECT * FROM "movieSchedules" WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM "movieSchedules" WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertMovieSchedule = (data, callback) => {
@@ -37,5 +41,9 @@ exports.patchUser = (data, param, callback) => {
 }
 
 exports.deleteMovieSchedule = (param, callback) => {
-  return db.query(`DELETE FROM "movieSchedules" WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM "movieSchedules" WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

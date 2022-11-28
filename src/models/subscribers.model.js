@@ -17,7 +17,11 @@ exports.countAllSubscribers = (filter, callback) => {
 }
 
 exports.selectSubscriber = (param, callback) => {
-  return db.query(`SELECT * FROM subscribers WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM subscribers WHERE id=$1`
+
+  const values = [param.id] 
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertSubscriber = (data, callback) => {
@@ -37,5 +41,9 @@ exports.patchSubscriber = (data, param, callback) => {
 }
 
 exports.deleteSubscriber = (param, callback) => {
-  return db.query(`DELETE FROM subscribers WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM subscribers WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

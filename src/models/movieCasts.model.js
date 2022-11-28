@@ -1,11 +1,17 @@
 const db = require('../helpers/db.helper')
 
 exports.selectAllMovieCasts = (callback) => {
-  return db.query(`SELECT * FROM "movieCasts"`, callback)
+  const sql = `SELECT * FROM "movieCasts"`;
+  
+  return db.query(sql, callback)
 }
 
 exports.selectMovieCast = (param, callback) => {
-  return db.query(`SELECT * FROM "movieCasts" WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM "movieCasts" WHERE id=$1`;
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertMovieCast = (data, callback) => {
@@ -25,5 +31,9 @@ exports.patchMovieCast = (data, param, callback) => {
 }
 
 exports.deleteMovieCast = (param, callback) => {
-  return db.query(`DELETE FROM "movieCasts" WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM "movieCasts" WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

@@ -17,7 +17,11 @@ exports.countAllPaymentMethods = (filter, callback) => {
 }
 
 exports.selectPaymentMethod = (param, callback) => {
-  return db.query(`SELECT * FROM "paymentMethod" WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM "paymentMethod" WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertPaymentMethod = (data, callback) => {
@@ -37,5 +41,9 @@ exports.patchUser = (data, param, callback) => {
 }
 
 exports.deletePaymentMethod = (param, callback) => {
-  return db.query(`DELETE FROM "paymentMethod" WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM "paymentMethod" WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

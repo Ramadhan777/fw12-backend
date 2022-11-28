@@ -17,7 +17,11 @@ exports.countAllStatus = (filter, callback) => {
 }
 
 exports.selectStatus = (param, callback) => {
-  return db.query(`SELECT * FROM status WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM status WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertStatus = (data, callback) => {
@@ -37,5 +41,9 @@ exports.patchStatus = (data, param, callback) => {
 }
 
 exports.deleteStatus = (param, callback) => {
-  return db.query(`DELETE FROM status WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM status WHERE id=$1 RETURNING *`
+
+  const values = [param.id] 
+
+  return db.query(sql, values, callback)
 }

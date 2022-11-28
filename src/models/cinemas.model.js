@@ -17,7 +17,11 @@ exports.countAllCinemas = (filter, callback) => {
 }
 
 exports.selectCinema = (param, callback) => {
-  return db.query(`SELECT * FROM cinemas WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM cinemas WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values , callback)
 }
 
 exports.insertCinema = (data, callback) => {
@@ -37,5 +41,9 @@ exports.patchCinema = (data, param, callback) => {
 }
 
 exports.deleteCinema = (param, callback) => {
-  return db.query(`DELETE FROM cinemas WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM cinemas WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

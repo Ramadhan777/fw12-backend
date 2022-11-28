@@ -1,11 +1,17 @@
 const db = require('../helpers/db.helper')
 
 exports.selectAllMovieGenres = (callback) => {
-  return db.query(`SELECT * FROM "movieGenre"`, callback)
+  const sql = `SELECT * FROM "movieGenre"`
+
+  return db.query(sql, callback)
 }
 
 exports.selectMovieGenre = (param, callback) => {
-  return db.query(`SELECT * FROM "movieGenre" WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM "movieGenre" WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values,  callback)
 }
 
 exports.insertMovieGenre = (data, callback) => {
@@ -17,7 +23,7 @@ exports.insertMovieGenre = (data, callback) => {
 }
 
 exports.patchMovieGenre = (data, param, callback) => {
-  const sql = `UPDATE "movieGenre" SET "movieId"=COALESCE(NULLIF($1,0), "movieId"), "genreId"=COALESCE(NULLIF($2,0), "genreId") WHERE id=$3 RETURNING d*`
+  const sql = `UPDATE "movieGenre" SET "movieId"=COALESCE(NULLIF($1,0), "movieId"), "genreId"=COALESCE(NULLIF($2,0), "genreId") WHERE id=$3 RETURNING *`
 
   const values = [data.movieId, data.genreId, param.id]
 
@@ -25,5 +31,9 @@ exports.patchMovieGenre = (data, param, callback) => {
 }
 
 exports.deleteMovieGenre = (param, callback) => {
-  return db.query(`DELETE FROM "movieGenre" WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM "movieGenre" WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

@@ -16,8 +16,12 @@ exports.countAllUsers = (filter, callback) => {
   return db.query(sql, values, callback)
 }
 
-exports.selectUser = (data, callback) => {
-  return db.query(`SELECT * FROM users WHERE id=${data.id}`, callback)
+exports.selectUser = (param, callback) => {
+  const sql = `SELECT * FROM users WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.selectUserByEmail = (data, callback) => {
@@ -45,5 +49,9 @@ exports.patchUser = (data, param, callback) => {
 }
 
 exports.deleteUser = (param, callback) => {
-  return db.query(`DELETE FROM users WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM users WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }

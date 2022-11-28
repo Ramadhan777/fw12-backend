@@ -17,7 +17,11 @@ exports.countAllCasts = (filter, callback) => {
 }
 
 exports.selectCast = (param, callback) => {
-  return db.query(`SELECT * FROM casts WHERE id=${param.id}`, callback)
+  const sql = `SELECT * FROM casts WHERE id=$1`
+
+  const values = [param.id]
+
+  return db.query(sql, values, callback)
 }
 
 exports.insertCast = (data, callback) => {
@@ -37,5 +41,9 @@ exports.patchCast = (data, param, callback) => {
 }
 
 exports.deleteCast = (param, callback) => {
-  return db.query(`DELETE FROM casts WHERE id=${param.id} RETURNING *`, callback)
+  const sql = `DELETE FROM casts WHERE id=$1 RETURNING *`
+
+  const values = [param.id]
+  
+  return db.query(sql, values, callback)
 }
