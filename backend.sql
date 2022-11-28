@@ -173,6 +173,9 @@ ALTER TABLE "movies" ADD CONSTRAINT "title" UNIQUE ("title");
 ALTER TABLE "genre" ADD CONSTRAINT "genreName" UNIQUE ("name");
 ALTER TABLE "casts" ADD CONSTRAINT "castsName" UNIQUE ("name");
 ALTER TABLE "cinemas" ADD CONSTRAINT "cinemaName" UNIQUE ("name");
+ALTER TABLE "users" ADD CONSTRAINT "phoneNumber" UNIQUE ("phoneNumber");
+ALTER TABLE "transactions" ADD CONSTRAINT "t.phoneNumber" UNIQUE ("phoneNumber");
+ALTER TABLE "transactions" ADD CONSTRAINT "t.email" UNIQUE ("email");
 
 ALTER TABLE "resetPassword" ADD CONSTRAINT "fk_userId" FOREIGN KEY ("userId") REFERENCES users
 (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -196,6 +199,7 @@ ALTER TABLE "transactions" ADD CONSTRAINT "fk_movieId" FOREIGN KEY ("movieId") R
 ALTER TABLE "transactions" ADD CONSTRAINT "fk_cinemaId" FOREIGN KEY ("cinemaId") REFERENCES cinemas (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "transactions" ADD CONSTRAINT "fk_movieScheduleId" FOREIGN KEY ("movieScheduleID") REFERENCES "movieSchedules" (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "transactions" ADD CONSTRAINT "fk_statusId" FOREIGN KEY ("statusId") REFERENCES "status" (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "reservedSeat" ADD CONSTRAINT "fk_transactionId" FOREIGN KEY ("transactionId") REFERENCES "transactions" (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 SELECT m.title, g.name as genre FROM "movies" m JOIN "movieGenre" mg ON mg."movieId" = m.id JOIN "genre" g ON g.id = mg."genreId";
 
