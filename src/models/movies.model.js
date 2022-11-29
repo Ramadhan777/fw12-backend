@@ -23,6 +23,22 @@ exports.selectMovie = (param, callback) => {
   return db.query(sql, values, callback)
 }
 
+exports.selectMovieByNow = (callback) => {
+  const sql = `SELECT m.* FROM "movieSchedules" ms JOIN "movies" m ON ms."movieId" = m.id WHERE $1 BETWEEN "startDate" AND "endDate";`
+
+  const values = [new Date()]
+
+  return db.query(sql, values, callback)
+}
+
+exports.selectMovieByMonth = (month, callback) => {
+  const sql = `SELECT * FROM "movies" WHERE "releaseDate" >= $1 AND "releaseDate" < $2`
+
+  const values = [`2022-${month}-01`, `2022-${parseInt(month) + 1}-01`]
+
+  return db.query(sql, values, callback)
+}
+
 exports.insertMovie = (data, callback) => {
   const sql ='INSERT INTO movies ("title", "picture", "releaseDate", "director", "duration", "synopsis") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
 

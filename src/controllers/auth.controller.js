@@ -1,4 +1,6 @@
-const { selectUserByEmail, insertUser } = require('../models/users.model')
+const { selectUserByEmail, insertUser, patchUser } = require('../models/users.model')
+const { insertResetPassword, selectResetPasswordByEmailAndCode, deleteResetPassword
+ } = require('../models/resetPassword.model')
 const jwt = require('jsonwebtoken')
 
 exports.login = (req, res) => {
@@ -8,7 +10,7 @@ exports.login = (req, res) => {
       if(req.body.password === user.password){
         const token = jwt.sign({id: user.id}, 'backend-secret')
         return res.status(200).json({
-          success: true, 
+          success: true,
           message: 'login success',
           results: {
             token
@@ -18,14 +20,14 @@ exports.login = (req, res) => {
 
       else{
         return res.status(401).json({
-        success: false, 
+        success: false,
         message: 'Wrong Email or Password'
       })
       }
     }
     else{
       return res.status(401).json({
-      success: false, 
+      success: false,
       message: 'Wrong Email or Password'
     })
     }
@@ -37,10 +39,102 @@ exports.register = (req, res) => {
     if(error){
       return errorHandler(error, res)
     }
+    const {rows: users} = data;
+    const [user] = users
+    const token = jwt.sign({id: user.id}, 'backend-secret')
+
     return res.status(200).json({
       success: true,
       message: "User created successfully",
-      user: data.rows[0]
+      results: {
+        token
+      }
     })
     })
+}
+
+exports.forgotPassword = (req, res) => {
+  const { email } = req.body
+
+  selectUserByEmail(req.body, (err, {rows: users}) => {
+    if(err){
+      return errorHandler(err, res)
+    }
+    if(users.length){
+      const [user] = users
+      const data = {
+        email,
+        userId: user.id,
+        code: Math.ceil(Math.random() * 90000 + 10000)
+      };
+
+      insertResetPassword(data, (err, {rows: results}) => {
+        if(results.length){
+          return res.status(200).json({
+            success: true,
+            message: "Reset password has been requested"
+          })
+        }
+      })
+    } else{
+      return res.status(400).json({
+        success: false,
+        message: "Request Failed"
+      })
+    }
+
+  })
+}
+
+exports.resetPassword = (req, res) => {
+  const { password, confirmPassword } = req.body
+
+  if(password === confirmPassword){
+    selectResetPasswordByEmailAndCode(req.body, (err, {rows : users}) => {
+      if(err){
+        return errorHandler(err, res)
+      }
+
+      if(users.length){
+        const [request] = users
+        const data = {
+          password
+        }
+
+        if((new Date().getTime() - new Date(request.createdAt).getTime() ) > 1000 * 60 * 15){
+          return res.status(400).json({
+            success: false,
+            message: "Code expired"
+          })
+        }
+
+        patchUser(data, request.userId, (err, {rows: users}) => {
+          if(err){
+            return errorHandler(err, res)
+          }
+
+          if(users.length){
+            deleteResetPassword(request.id, (err, {rows})=> {
+              if(rows.length){
+                return res.status(200).json({
+                  success: true,
+                  message: "Password updated, please relogin"
+                })
+              }
+            })
+          }
+        })
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: 'Reset password failed, request Invalid'
+        })
+      }
+    })
+  } else{
+    return res.status(400).json({
+      success: false,
+      message: "Password and confirm password not match"
+    })
+  }
 }

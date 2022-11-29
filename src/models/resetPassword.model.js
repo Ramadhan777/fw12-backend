@@ -24,10 +24,18 @@ exports.selectResetPassword = (param, callback) => {
   return db.query(sql, values, callback)
 }
 
+exports.selectResetPasswordByEmailAndCode = (data, callback) => {
+  const sql = `SELECT * FROM "resetPassword" WHERE email=$1 AND code=$2`
+
+  const values = [data.email, data.code]
+
+  return db.query(sql, values, callback)
+}
+
 exports.insertResetPassword = (data, callback) => {
   const sql = `INSERT INTO "resetPassword"("email", "userId", "code") VALUES ($1, $2, $3) RETURNING *`;
 
-  const values = [data.email, data.userId];
+  const values = [data.email, data.userId, data.code];
 
   return db.query(sql, values, callback)
 }
@@ -40,6 +48,6 @@ exports.patchResetPassword = (data, param, callback) => {
   return db.query(sql, values, callback)
 }
 
-exports.deleteResetPassword = (param, callback) => {
-  return db.query(`DELETE FROM "resetPassword" WHERE id=${param.id} RETURNING *`, callback)
+exports.deleteResetPassword = (id, callback) => {
+  return db.query(`DELETE FROM "resetPassword" WHERE id=${id} RETURNING *`, callback)
 }

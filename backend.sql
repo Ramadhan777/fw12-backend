@@ -142,7 +142,9 @@ INSERT INTO "users" ("picture","firstName","lastName","phoneNumber","email","pas
 
 INSERT INTO "resetPassword" ("email", "userId", "code") VALUES ('john@gmail.com','2', 'secret');
 
-INSERT INTO "movies" ("title","picture","releaseDate","director","duration","synopsis") VALUES ('John Wick', '', '24 October 2014', 'Chad Stahelski', '01:41:00', 'An ex-hitman comes out of retirement to track down the gangsters that killed his dog, the last gift he got from his deceased wife.');
+INSERT INTO "movies" ("title","picture","releaseDate","director","duration","synopsis") VALUES ('John Wick', 'https://m.media-amazon.com/images/M/MV5BMTU2NjA1ODgzMF5BMl5BanBnXkFtZTgwMTM2MTI4MjE@._V1_SX300.jpg', '24 October 2014', 'Chad Stahelski', '01:41:00', 'An ex-hitman comes out of retirement to track down the gangsters that killed his dog, the last gift he got from his deceased wife.'),
+('Harry Potter and the Deathly Hallows: Part 2', 'https://m.media-amazon.com/images/M/MV5BMGVmMWNiMDktYjQ0Mi00MWIxLTk0N2UtN2ZlYTdkN2IzNDNlXkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg', '24 October 2014', 'David Yates', '02:10:00', 'Harry, Ron and Hermione race against time to destroy the remaining Horcruxes. Meanwhile, students and teachers unite to defend Hogwarts against Lord Voldemort and his minions. Others are also searching'),
+('Spider-Man: Homecoming', 'https://m.media-amazon.com/images/M/MV5BNTk4ODQ1MzgzNl5BMl5BanBnXkFtZTgwMTMyMzM4MTI@._V1_SX300.jpg', '2017-07-07 00:00:00-07', 'Jon Watts', '02:13:00', 'Peter Parker tries to balance his two very contradictory lives - stopping Adrian Toomes\'s sale of Chitauri weapons and living his days like a high school student.');
 
 INSERT INTO "genre" ("name") VALUES ('Adventure');
 
@@ -204,3 +206,9 @@ ALTER TABLE "reservedSeat" ADD CONSTRAINT "fk_transactionId" FOREIGN KEY ("trans
 SELECT m.title, g.name as genre FROM "movies" m JOIN "movieGenre" mg ON mg."movieId" = m.id JOIN "genre" g ON g.id = mg."genreId";
 
 SELECT m.title, c.name as cast FROM "movies" m JOIN "movieCasts" mc ON mc."movieId" = m.id JOIN "casts" c ON c.id = mc."castsId";
+
+SELECT * FROM "movieSchedules" WHERE '2022-12-06' BETWEEN "startDate" AND "endDate";
+
+SELECT m.* FROM "movieSchedules" ms JOIN "movies" m ON ms."movieId" = m.id WHERE '2022-12-06' BETWEEN "startDate" AND "endDate";
+
+SELECT * FROM "movies" WHERE "releaseDate" >= '2022-11-01' AND "releaseDate" < '2022-12-01'

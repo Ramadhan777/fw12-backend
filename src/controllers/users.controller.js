@@ -22,7 +22,7 @@ exports.readAllUsers = (req, res) => {
 }
 
 exports.readUser = (req, res) => {
-  selectUser(req.params, (error, data) => {
+  selectUser(req.params.id, (error, data) => {
     console.log(data)
     if(error){
       return errorHandler(error, res)
@@ -56,7 +56,7 @@ exports.createUser = (req, res) => {
 }
 
 exports.updateUser = (req,  res) => {
-  patchUser(req.body, req.params, (error, data) => {
+  patchUser(req.body, req.params.id, (error, data) => {
     if(error){
       return errorHandler(error, res)
     }
@@ -77,7 +77,7 @@ exports.updateUser = (req,  res) => {
 }
 
 exports.deleteUser = (req, res) => {
-  deleteUser(req.params, (error, data) => {
+  deleteUser(req.params.id, (error, data) => {
     if(error){
       return errorHandler(error, res)
     }

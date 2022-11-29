@@ -1,4 +1,4 @@
-const { selectAllMovies, selectMovie, insertMovie, patchUser, deleteMovie, countAllMovies } = require('../models/movies.model')
+const { selectAllMovies, selectMovie, selectMovieByNow, selectMovieByMonth,insertMovie, patchUser, deleteMovie, countAllMovies } = require('../models/movies.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
 
@@ -38,6 +38,46 @@ exports.readMovie = (req, res) => {
     return res.status(200).json({
       success: true,
       movie: data.rows
+    })
+  })
+}
+
+exports.readMovieByNow = (req, res) => {
+  selectMovieByNow((err, data) => {
+    if(err){
+      return errorHandler(err, res)
+    }
+
+    if(data.rows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Movie not found"
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      movies: data.rows
+    })
+  })
+}
+
+exports.readMovieByMonth = (req, res) => {
+  selectMovieByMonth(req.body.month, (err, data) => {
+    if(err){
+      return errorHandler(err, res)
+    }
+
+    if(data.rows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Movie not found"
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      movies: data.rows
     })
   })
 }

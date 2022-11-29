@@ -16,10 +16,10 @@ exports.countAllUsers = (filter, callback) => {
   return db.query(sql, values, callback)
 }
 
-exports.selectUser = (param, callback) => {
+exports.selectUser = (id, callback) => {
   const sql = `SELECT * FROM users WHERE id=$1`
 
-  const values = [param.id]
+  const values = [id]
 
   return db.query(sql, values, callback)
 }
@@ -40,18 +40,18 @@ exports.insertUser = (data, callback) => {
   return db.query(sql, values, callback)
 }
 
-exports.patchUser = (data, param, callback) => {
+exports.patchUser = (data, id, callback) => {
   const sql = `UPDATE users SET "firstName"=COALESCE(NULLIF($1,''), "firstName"), "lastName"=COALESCE(NULLIF($2,''), "lastName"), "phoneNumber"=COALESCE(NULLIF($3, ''), "phoneNumber"), "email"=COALESCE(NULLIF($4, ''), "email"), "password"=COALESCE(NULLIF($5,''), "password")  WHERE id=$6 RETURNING *`;
 
-  const values = [data.firstName, data.lastName, data.phoneNumber, data.email, data.password, param.id]
+  const values = [data.firstName, data.lastName, data.phoneNumber, data.email, data.password, id]
 
   return db.query(sql, values, callback)
 }
 
-exports.deleteUser = (param, callback) => {
+exports.deleteUser = (id, callback) => {
   const sql = `DELETE FROM users WHERE id=$1 RETURNING *`
 
-  const values = [param.id]
+  const values = [id]
 
   return db.query(sql, values, callback)
 }
