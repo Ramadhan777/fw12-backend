@@ -71,6 +71,13 @@ const errorHandler = (err, res) => {
       })
     }
 
+    if(err.message.includes('Only .png, .jpg and .jpeg format allowed')){
+      return res.status(400).json({
+        success: false,
+        message: "Only .png, .jpg and .jpeg format allowed"
+      })
+    }
+
     return res.status(500).json({
       success: false,
       message: "Something happened on our backend"

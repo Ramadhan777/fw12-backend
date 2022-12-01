@@ -18,17 +18,32 @@ const storage = multer.diskStorage({
   },
 });
 
+const fileFilter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg" ||
+    file.mimetype === "image/jpeg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+    return cb(new Error("Only .png, .jpg and .jpeg format allowed"))
+  }
+};
+
+const maxSize = 1 * 1024 * 1024
+
 const upload = multer({
   storage,
+  fileFilter,
+  limits: { fileSize: maxSize}
 });
 
 const uploadMiddleware = upload.single("picture");
 
 module.exports = (req, res, next) => {
-
   uploadMiddleware(req, res, (err) => {
     if (err) {
-      console.log("error disini");
       return errorHandler(err, res);
     }
     next();

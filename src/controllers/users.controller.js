@@ -58,11 +58,14 @@ exports.createUser = (req, res) => {
 exports.updateUser = (req,  res) => {
   if(req.file){
     req.body.picture = req.file.filename
-    selectUser(req.params.id, (err, data) => {
+    selectUser(req.userData.id, (err, data) => {
+      if(err){
+        return errorHandler(err, res)
+      }
       if(data.rows.length){
         const [user] = data.rows;
         if(user.picture){
-
+          console.log(user.picture)
           fs.rm("uploads/" + user.picture, {force: true}, (err) => {
             if(err){
               return errorHandler(err, res)
