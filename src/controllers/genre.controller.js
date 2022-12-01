@@ -15,7 +15,7 @@ exports.readAllGenres = (req,res) => {
       success: true,
       message: 'List of Genres',
       pageInfo,
-      casts: result.rows
+      genres: result.rows
     })
   })
 })

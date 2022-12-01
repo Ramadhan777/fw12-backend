@@ -1,4 +1,5 @@
 const {insertTransaction, selectAllTransactions, selectTransaction, patchTransaction, deleteTransaction, countAllTransactions} = require('../models/Transactions.model')
+const { insertReservedSeat } = require('../models/reservedSeat.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
 
@@ -15,7 +16,7 @@ exports.readAllTransactions = (req, res) => {
       success: true,
       message: 'List of Transactions',
       pageInfo,
-      casts: result.rows
+      transactions: result.rows
     })
   })
 })
@@ -53,6 +54,28 @@ exports.createTransaction = (req, res) => {
     })
     })
 }
+
+exports.createTransactionAndReservedSeat = (req, res) => {
+  req.body.userID = req.userData.id
+
+  insertTransaction(req.body, (err, data) => {
+    if(err){
+      return errorHandler(err, res)
+    }
+    req.body.transactionId = data.rows[0].id
+
+    insertReservedSeat(req.body, (err, result) => {
+      if(err) {
+        return errorHandler(err, res)
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Transaction success",
+      })
+    })
+}
+)}
 
 exports.updateTransaction = (req,  res) => {
   patchTransaction(req.body, req.params, (error, data) => {

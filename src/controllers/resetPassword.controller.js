@@ -15,7 +15,7 @@ exports.readAllResetPasswords = (req,res) => {
       success: true,
       message: 'List of Reset Passwords',
       pageInfo,
-      casts: result.rows
+      resetPassword: result.rows
     })
   })
 })

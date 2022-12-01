@@ -1,5 +1,6 @@
 const transactionRouter = require('express').Router()
 const { readAllTransactions, createTransaction, updateTransaction, deleteTransaction, readTransaction } = require('../controllers/transactions.controller')
+const authMiddleware = require('../middleware/auth.middleware')
 
 transactionRouter.get('/', readAllTransactions)
 transactionRouter.get('/:id', readTransaction)

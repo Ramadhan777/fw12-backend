@@ -15,7 +15,7 @@ exports.readAllSubscribers = (req, res) => {
       success: true,
       message: 'List of Subscribers',
       pageInfo,
-      casts: result.rows
+      subscribers: result.rows
     })
   })
 })

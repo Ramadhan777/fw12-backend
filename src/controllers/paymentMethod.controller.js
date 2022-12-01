@@ -15,7 +15,7 @@ exports.readAllPaymentMethods = (req, res) => {
       success: true,
       message: 'List of Payment Methods',
       pageInfo,
-      casts: result.rows
+      paymentMethods: result.rows
     })
   })
 })

@@ -23,18 +23,18 @@ exports.selectMovie = (param, callback) => {
   return db.query(sql, values, callback)
 }
 
-exports.selectMovieByNow = (callback) => {
-  const sql = `SELECT m.* FROM "movieSchedules" ms JOIN "movies" m ON ms."movieId" = m.id WHERE $1 BETWEEN "startDate" AND "endDate";`
+exports.selectMovieByNow = (filter, callback) => {
+  const sql = `SELECT m.id, m.title, ms."startDate", ms."endDate", c.name as cinema, string_agg(g.name, ', ') as genre FROM "movies" m JOIN "movieSchedules" ms ON ms."movieId" = m.id JOIN "cinemas" c ON ms."cinemaId" = c.id LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE m.title LIKE $3 AND current_date BETWEEN "startDate" AND "endDate" GROUP BY m.id, ms.id, c.id ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $1 OFFSET $2;`
 
-  const values = [new Date()]
+  const values = [filter.limit, filter.offset, `%${filter.search}%`]
 
   return db.query(sql, values, callback)
 }
 
-exports.selectMovieByMonth = (month, callback) => {
-  const sql = `SELECT * FROM "movies" WHERE "releaseDate" >= $1 AND "releaseDate" < $2`
+exports.selectMovieByMonth = (filter, data, callback) => {
+  const sql = `SELECT m.*, string_agg(g.name, ', ') as genre FROM "movies" m LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN "genre" g ON g.id = mg."genreId" WHERE title LIKE $5 AND date_part('year',"releaseDate")::TEXT = COALESCE(NULLIF($1 ,''), date_part('year', current_date)::TEXT) AND date_part('month',"releaseDate")::TEXT = COALESCE(NULLIF($2 ,''), date_part('month', current_date)::TEXT) ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $3 OFFSET $4`
 
-  const values = [`2022-${month}-01`, `2022-${parseInt(month) + 1}-01`]
+  const values = [data.year, data.month, filter.limit, filter.offset, `%${filter.search}%`]
 
   return db.query(sql, values, callback)
 }

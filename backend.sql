@@ -176,8 +176,8 @@ ALTER TABLE "genre" ADD CONSTRAINT "genreName" UNIQUE ("name");
 ALTER TABLE "casts" ADD CONSTRAINT "castsName" UNIQUE ("name");
 ALTER TABLE "cinemas" ADD CONSTRAINT "cinemaName" UNIQUE ("name");
 ALTER TABLE "users" ADD CONSTRAINT "phoneNumber" UNIQUE ("phoneNumber");
-ALTER TABLE "transactions" ADD CONSTRAINT "t.phoneNumber" UNIQUE ("phoneNumber");
-ALTER TABLE "transactions" ADD CONSTRAINT "t.email" UNIQUE ("email");
+ALTER TABLE "transactions" DROP CONSTRAINT "t.phoneNumber";
+ALTER TABLE "transactions" DROP CONSTRAINT "t.email";
 
 ALTER TABLE "resetPassword" ADD CONSTRAINT "fk_userId" FOREIGN KEY ("userId") REFERENCES users
 (id) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -211,4 +211,8 @@ SELECT * FROM "movieSchedules" WHERE '2022-12-06' BETWEEN "startDate" AND "endDa
 
 SELECT m.* FROM "movieSchedules" ms JOIN "movies" m ON ms."movieId" = m.id WHERE '2022-12-06' BETWEEN "startDate" AND "endDate";
 
-SELECT * FROM "movies" WHERE "releaseDate" >= '2022-11-01' AND "releaseDate" < '2022-12-01'
+SELECT * FROM "movies" WHERE "releaseDate" >= '2022-11-01' AND "releaseDate" < '2022-12-01';
+
+SELECT * FROM "movies" WHERE title LIKE '%Harry%' AND date_part('year',"releaseDate") = date_part('year', '2022-11-02'::DATE) AND date_part('month',"releaseDate") = date_part('month', '2022-11-02'::DATE) ;
+
+

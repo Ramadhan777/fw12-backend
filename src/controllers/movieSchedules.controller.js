@@ -2,7 +2,6 @@ const { selectAllMovieSchedules, selectMovieSchedule, insertMovieSchedule, patch
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
 
-
 exports.readAllMovieSchedules = (req, res) => {
   const sortable = ['movieId', 'cinemaId', 'price', 'startDate', 'endDate', 'createdAt', 'updatedAt']
 
@@ -16,7 +15,7 @@ exports.readAllMovieSchedules = (req, res) => {
       success: true,
       message: 'List of Movie Schedules',
       pageInfo,
-      casts: result.rows
+      movieSchedules: result.rows
     })
   })
 })

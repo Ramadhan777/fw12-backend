@@ -15,7 +15,7 @@ exports.readAllStatus = (req, res) => {
       success: true,
       message: 'List of Status',
       pageInfo,
-      casts: result.rows
+      status: result.rows
     })
   })
 })

@@ -25,9 +25,9 @@ exports.selectTransaction = (data, callback) => {
 }
 
 exports.insertTransaction = (data, callback) => {
-  const sql = 'INSERT INTO transactions ("bookingDate", "movieId", "cinemaId", "movieScheduleID", "fullName", "email", "phoneNumber", "statusId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *';
+  const sql = 'INSERT INTO transactions ("userID", "bookingDate", "movieId", "cinemaId", "movieScheduleID", "fullName", "email", "phoneNumber", "statusId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *';
 
-  const values = [data.bookingDate, data.movieId, data.cinemaId, data.movieScheduleID, data.fullName, data.email, data.phoneNumber, data.statusId]
+  const values = [data.userID, data.bookingDate, data.movieId, data.cinemaId, data.movieScheduleID, data.fullName, data.email, data.phoneNumber, data.statusId]
 
   return db.query(sql, values, callback)
 }
@@ -42,7 +42,7 @@ exports.patchTransaction = (data, param, callback) => {
 
 exports.deleteTransaction = (param, callback) => {
   const sql = `DELETE FROM transactions WHERE id=$1 RETURNING *`
-  
+
   const values = [param.id]
 
   return db.query(sql, values, callback)

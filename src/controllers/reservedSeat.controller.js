@@ -15,7 +15,7 @@ exports.readAllReservedSeats = (req, res) => {
       success: true,
       message: 'List of Reserved Seats',
       pageInfo,
-      casts: result.rows
+      reservedSeat: result.rows
     })
   })
 })

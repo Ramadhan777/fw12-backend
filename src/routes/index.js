@@ -1,10 +1,12 @@
 const routes = require('express').Router()
 const authMiddleware = require('../middleware/auth.middleware')
-
+const uploadMiddleware = require('../middleware/upload.middleware')
+const { createTransactionAndReservedSeat } = require('../controllers/transactions.controller')
+const {updateUser} = require('../controllers/users.controller')
 
 routes.use('/users', require('./users.router'))
 routes.use('/resetPassword', require('./resetPassword.router'))
-routes.use('/movies', authMiddleware, require('./movies.router'))
+routes.use('/movies', require('./movies.router'))
 routes.use('/genre', require('./genre.router'))
 routes.use('/movieGenre', require('./movieGenre.router'))
 routes.use('/casts', require('./casts.router'))
@@ -17,7 +19,9 @@ routes.use('/transactions', require('./transactions.router'))
 routes.use('/reservedSeat', require('./reservedSeat.router'))
 routes.use('/paymentMethod', require('./paymentMethod.router'))
 routes.use('/subscribers', require('./subscribers.router'))
-
 routes.use('/auth', require('./auth.router'))
+routes.use('/profile', require('./profile.router'))
+
+routes.post('/createTransaction', authMiddleware, createTransactionAndReservedSeat)
 
 module.exports = routes

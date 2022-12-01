@@ -15,7 +15,7 @@ exports.readAllCinemas = (req, res) => {
       success: true,
       message: 'List of cinemas',
       pageInfo,
-      casts: result.rows
+      cinemas: result.rows
     })
   })
 })

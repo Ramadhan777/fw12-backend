@@ -1,6 +1,7 @@
 const {insertUser, selectAllUsers, selectUser, patchUser, deleteUser, countAllUsers} = require('../models/users.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
+const fs = require('fs')
 
 exports.readAllUsers = (req, res) => {
   const sortable = ['firstName','lastName', 'email', 'createdAt', 'updatedAt']
@@ -15,7 +16,7 @@ exports.readAllUsers = (req, res) => {
       success: true,
       message: 'List of Users',
       pageInfo,
-      casts: result.rows
+      users: result.rows
     })
   })
 })
@@ -23,7 +24,6 @@ exports.readAllUsers = (req, res) => {
 
 exports.readUser = (req, res) => {
   selectUser(req.params.id, (error, data) => {
-    console.log(data)
     if(error){
       return errorHandler(error, res)
     }
@@ -56,7 +56,24 @@ exports.createUser = (req, res) => {
 }
 
 exports.updateUser = (req,  res) => {
-  patchUser(req.body, req.params.id, (error, data) => {
+  if(req.file){
+    req.body.picture = req.file.filename
+    selectUser(req.params.id, (err, data) => {
+      if(data.rows.length){
+        const [user] = data.rows;
+        if(user.picture){
+
+          fs.rm("uploads/" + user.picture, {force: true}, (err) => {
+            if(err){
+              return errorHandler(err, res)
+            }
+          })
+        }
+      }
+    })
+  }
+
+  patchUser(req.body, req.userData.id, (error, data) => {
     if(error){
       return errorHandler(error, res)
     }

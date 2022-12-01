@@ -15,7 +15,7 @@ exports.readAllMovieSchedulesTimes = (req, res) => {
       success: true,
       message: 'List of Movie Schedules Time',
       pageInfo,
-      casts: result.rows
+      movieScheduleTimes: result.rows
     })
   })
 })
