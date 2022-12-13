@@ -74,7 +74,7 @@ exports.forgotPassword = (req, res) => {
           return res.status(200).json({
             success: true,
             message: "Reset password has been requested",
-            results
+            results: results[0]
           })
         }
       })
