@@ -1,4 +1,4 @@
-const { selectAllStatus, selectStatus, insertStatus, patchStatus, deleteStatus, countAllStatus } = require('../models/Status.model')
+const { selectAllStatus, selectStatus, insertStatus, patchStatus, deleteStatus, countAllStatus } = require('../models/status.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
 

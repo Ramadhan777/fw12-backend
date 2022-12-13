@@ -1,4 +1,4 @@
-const { selectAllSubscribers, selectSubscriber, insertSubscriber, patchSubscriber, deleteSubscriber, countAllSubscribers } = require('../models/Subscribers.model')
+const { selectAllSubscribers, selectSubscriber, insertSubscriber, patchSubscriber, deleteSubscriber, countAllSubscribers } = require('../models/subscribers.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
 
