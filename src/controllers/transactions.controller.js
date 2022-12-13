@@ -16,7 +16,7 @@ exports.readAllTransactions = (req, res) => {
       success: true,
       message: 'List of Transactions',
       pageInfo,
-      transactions: result.rows
+      results: result.rows
     })
   })
 })
@@ -37,7 +37,7 @@ exports.readTransaction = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      transaction: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createTransaction = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Transaction created successfully",
-      transaction: data.rows[0]
+      results: data.rows[0]
     })
     })
 }
@@ -114,7 +114,7 @@ exports.deleteTransaction = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Transaction Deleted",
-      transaction: data.rows
+      results: data.rows
     })
   })
 }

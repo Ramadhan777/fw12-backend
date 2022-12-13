@@ -15,7 +15,7 @@ exports.readAllGenres = (req,res) => {
       success: true,
       message: 'List of Genres',
       pageInfo,
-      genres: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readGenre = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      genre: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createGenre = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Genre created successfully",
-      genre: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateGenre = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Genre Updated",
-      genre: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteGenre = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Genre Deleted",
-      genre: data.rows
+      results: data.rows
     })
   })
 }

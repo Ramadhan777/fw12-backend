@@ -9,7 +9,7 @@ exports.readAllMovieGenres = (req,res) => {
 
     return res.status(200).json({
       success: true,
-      movieGenre: data.rows
+      results: data.rows
     })
   })
 }
@@ -29,7 +29,7 @@ exports.readMovieGenre = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      movieGenre: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -43,7 +43,7 @@ exports.createMovieGenre = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Genre created successfully",
-      movieGenre: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -64,7 +64,7 @@ exports.updateMovieGenre = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Genre Updated",
-      movieGenre: data.rows
+      results: data.rows
     })
   })
 }
@@ -85,7 +85,7 @@ exports.deleteMovieGenre = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Genre Deleted",
-      movieGenre: data.rows
+      results: data.rows
     })
   })
 }

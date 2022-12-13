@@ -15,7 +15,7 @@ exports.readAllCinemas = (req, res) => {
       success: true,
       message: 'List of cinemas',
       pageInfo,
-      cinemas: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readCinema = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      cinema: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createCinema = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Cinema created successfully",
-      cinema: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateCinema = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Cinema Updated",
-      cinema: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteCinema = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Cinema Deleted",
-      cinema: data.rows
+      results: data.rows
     })
   })
 }

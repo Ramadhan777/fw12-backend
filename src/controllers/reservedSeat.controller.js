@@ -15,7 +15,7 @@ exports.readAllReservedSeats = (req, res) => {
       success: true,
       message: 'List of Reserved Seats',
       pageInfo,
-      reservedSeat: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readReservedSeat = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      reservedSeat: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createReservedSeat = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Reserved Seat created successfully",
-      reservedSeat: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateReservedSeat = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "ReservedSeat Updated",
-      reservedSeat: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteReservedSeat = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Reserved Seat Deleted",
-      reservedSeat: data.rows
+      results: data.rows
     })
   })
 }

@@ -1,7 +1,7 @@
 const db = require('../helpers/db.helper')
 
 exports.selectAllMovies = (filter, callback) => {
-  const sql = `SELECT * FROM movies WHERE title LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $2 OFFSET $3`
+  const sql = `SELECT m.*, string_agg(g.name, ', ') as genre FROM movies m LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE title LIKE $1 GROUP BY m.id ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $2 OFFSET $3`
 
   const values = [`%${filter.search}%`, filter.limit, filter.offset]
 
@@ -16,7 +16,7 @@ exports.countAllMovies = (filter, callback) => {
 }
 
 exports.selectMovie = (param, callback) => {
-  const sql = `SELECT * FROM movies WHERE id=$1`
+  const sql = `SELECT m.*, string_agg(DISTINCT(g.name), ', ') as genre,  string_agg(DISTINCT(c.name), ', ') as casts FROM "movies" m LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN "genre" g ON g.id = mg."genreId" LEFT JOIN "movieCasts" mc ON mc."movieId" = m.id LEFT  JOIN "casts" c ON mc."castId" = c.id  WHERE m.id=$1 GROUP BY m.id`
 
   const values = [param.id]
 
@@ -24,7 +24,7 @@ exports.selectMovie = (param, callback) => {
 }
 
 exports.selectMovieByNow = (filter, callback) => {
-  const sql = `SELECT m.id, m.title, ms."startDate", ms."endDate", c.name as cinema, string_agg(g.name, ', ') as genre FROM "movies" m JOIN "movieSchedules" ms ON ms."movieId" = m.id JOIN "cinemas" c ON ms."cinemaId" = c.id LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE m.title LIKE $3 AND current_date BETWEEN "startDate" AND "endDate" GROUP BY m.id, ms.id, c.id ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $1 OFFSET $2;`
+  const sql = `SELECT m.id, m.title, m.picture, ms."startDate", ms."endDate", c.name as cinema, string_agg(g.name, ', ') as genre FROM "movies" m JOIN "movieSchedules" ms ON ms."movieId" = m.id JOIN "cinemas" c ON ms."cinemaId" = c.id LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE m.title LIKE $3 AND current_date BETWEEN "startDate" AND "endDate" GROUP BY m.id, ms.id, c.id ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $1 OFFSET $2;`
 
   const values = [filter.limit, filter.offset, `%${filter.search}%`]
 
@@ -32,7 +32,7 @@ exports.selectMovieByNow = (filter, callback) => {
 }
 
 exports.selectMovieByMonth = (filter, data, callback) => {
-  const sql = `SELECT m.*, string_agg(g.name, ', ') as genre FROM "movies" m LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN "genre" g ON g.id = mg."genreId" WHERE title LIKE $5 AND date_part('year',"releaseDate")::TEXT = COALESCE(NULLIF($1 ,''), date_part('year', current_date)::TEXT) AND date_part('month',"releaseDate")::TEXT = COALESCE(NULLIF($2 ,''), date_part('month', current_date)::TEXT) ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $3 OFFSET $4`
+  const sql = `SELECT m.*, string_agg(g.name, ', ') as genre FROM "movies" m LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN "genre" g ON g.id = mg."genreId" WHERE title LIKE $5 AND date_part('year',"releaseDate")::TEXT = COALESCE(NULLIF($1 ,''), date_part('year', current_date)::TEXT) AND date_part('month',"releaseDate")::TEXT = COALESCE(NULLIF($2 ,''), date_part('month', current_date)::TEXT) GROUP BY m.id ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $3 OFFSET $4`
 
   const values = [data.year, data.month, filter.limit, filter.offset, `%${filter.search}%`]
 
@@ -47,7 +47,7 @@ exports.insertMovie = (data, callback) => {
   return db.query(sql, values, callback)
 }
 
-exports.patchUser = (data, param, callback) => {
+exports.patchMovie = (data, param, callback) => {
   const sql = `UPDATE movies SET "title"=COALESCE(NULLIF($1,''), "title"), "picture"=COALESCE(NULLIF($2,''), "picture"), "releaseDate"=COALESCE(NULLIF($3, '1970-01-01'::timestamptz), "releaseDate"), "director"=COALESCE(NULLIF($4,''), "director"), "duration"=COALESCE(NULLIF($5, '00:00:00'::time), "duration"), "synopsis"=COALESCE(NULLIF($6,''), "synopsis") WHERE id=$7 RETURNING *`;
 
   const values = [data.title, data.picture, data.releaseDate, data.director, data.duration, data.synopsis, param.id]

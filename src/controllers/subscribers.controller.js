@@ -15,7 +15,7 @@ exports.readAllSubscribers = (req, res) => {
       success: true,
       message: 'List of Subscribers',
       pageInfo,
-      subscribers: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readSubscriber = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      subscriber: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createSubscriber = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Subscriber created successfully",
-      subscriber: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateSubscriber = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Subscriber Updated",
-      subscriber: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteSubscriber = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Subscriber Deleted",
-      subscriber: data.rows
+      results: data.rows
     })
   })
 }

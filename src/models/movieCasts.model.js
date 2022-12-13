@@ -2,7 +2,7 @@ const db = require('../helpers/db.helper')
 
 exports.selectAllMovieCasts = (callback) => {
   const sql = `SELECT * FROM "movieCasts"`;
-  
+
   return db.query(sql, callback)
 }
 
@@ -15,7 +15,7 @@ exports.selectMovieCast = (param, callback) => {
 }
 
 exports.insertMovieCast = (data, callback) => {
-  const sql = `INSERT INTO "movieCasts"("movieId", "castsId") VALUES ($1, $2) RETURNING *`;
+  const sql = `INSERT INTO "movieCasts"("movieId", "castId") VALUES ($1, $2) RETURNING *`;
 
   const values = [data.movieId, data.castsId];
 

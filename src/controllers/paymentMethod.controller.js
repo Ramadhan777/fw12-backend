@@ -15,7 +15,7 @@ exports.readAllPaymentMethods = (req, res) => {
       success: true,
       message: 'List of Payment Methods',
       pageInfo,
-      paymentMethods: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readPaymentMethod = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      PaymentMethod: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createPaymentMethod = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Reserved Seat created successfully",
-      PaymentMethod: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updatePaymentMethod = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "PaymentMethod Updated",
-      PaymentMethod: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deletePaymentMethod = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Reserved Seat Deleted",
-      PaymentMethod: data.rows
+      results: data.rows
     })
   })
 }

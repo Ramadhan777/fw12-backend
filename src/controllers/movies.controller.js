@@ -4,12 +4,13 @@ const {
   selectMovieByNow,
   selectMovieByMonth,
   insertMovie,
-  patchUser,
+  patchMovie,
   deleteMovie,
   countAllMovies,
 } = require("../models/movies.model");
 const errorHandler = require("../helpers/errorHandler");
 const filter = require("../helpers/filter.helper");
+const fs = require('fs')
 
 exports.readAllMovies = (req, res) => {
   const sortable = [
@@ -31,7 +32,7 @@ exports.readAllMovies = (req, res) => {
         success: true,
         message: "List of Movies",
         pageInfo,
-        movies: result.rows,
+        results: result.rows,
       });
     });
   });
@@ -52,7 +53,7 @@ exports.readMovie = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      movie: data.rows,
+      results: data.rows[0],
     });
   });
 };
@@ -68,7 +69,7 @@ exports.readMovieByNow = (req, res) => {
   ];
 
   req.query.page = parseInt(req.query.page) || 1;
-  req.query.limit = parseInt(req.query.limit) || 5;
+  req.query.limit = parseInt(req.query.limit) || 8;
   req.query.search = req.query.search || "";
   req.query.sortBy =
     (sortable.includes(req.query.sortBy) && req.query.sortBy) || "id";
@@ -106,7 +107,7 @@ exports.readMovieByNow = (req, res) => {
     return res.status(200).json({
       success: true,
       pageInfo,
-      movies: data.rows,
+      results: data.rows,
     });
   });
 };
@@ -154,12 +155,16 @@ exports.readMovieByMonth = (req, res) => {
       success: true,
       message: "List of Movies",
       pageInfo,
-      casts: result.rows,
+      results: result.rows,
     });
   });
 };
 
 exports.createMovie = (req, res) => {
+  if(req.file){
+    req.body.picture = req.file.filename
+  }
+
   insertMovie(req.body, (err, data) => {
     if (err) {
       return errorHandler(err, res);
@@ -168,13 +173,33 @@ exports.createMovie = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Created",
-      movie: data.rows[0],
+      results: data.rows[0],
     });
   });
 };
 
 exports.updateMovie = (req, res) => {
-  patchUser(req.body, req.params, (err, data) => {
+  selectMovie(req.params, (err, data) => {
+    if(err){
+      return errorHandler(err, res)
+    }
+    if(data.rows.length){
+      const [movie] = data.rows;
+      if(movie.picture){
+        fs.rm("uploads/movie/" + movie.picture, {force: true}, (err) => {
+          if(err){
+            return errorHandler(err, res)
+          }
+        })
+      }
+    }
+  })
+
+  if(req.file){
+    req.body.picture = req.file.filename
+  }
+
+  patchMovie(req.body, req.params, (err, data) => {
     if (err) {
       return errorHandler(err, res);
     }
@@ -189,7 +214,7 @@ exports.updateMovie = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Updated",
-      movie: data.rows,
+      results: data.rows,
     });
   });
 };
@@ -210,7 +235,7 @@ exports.deleteMovie = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Deleted",
-      movie: data.rows,
+      results: data.rows,
     });
   });
 };

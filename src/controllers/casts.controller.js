@@ -15,7 +15,7 @@ exports.readAllCasts = (req, res) => {
       success: true,
       message: 'List of casts',
       pageInfo,
-      casts: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readCast = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      cast: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createCast = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Cast created successfully",
-      cast: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateCast = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Cast Updated",
-      cast: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteCast = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Cast Deleted",
-      cast: data.rows
+      results: data.rows
     })
   })
 }

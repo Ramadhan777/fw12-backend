@@ -66,7 +66,7 @@ exports.updateUser = (req,  res) => {
         const [user] = data.rows;
         if(user.picture){
           console.log(user.picture)
-          fs.rm("uploads/" + user.picture, {force: true}, (err) => {
+          fs.rm("uploads/profile/" + user.picture, {force: true}, (err) => {
             if(err){
               return errorHandler(err, res)
             }

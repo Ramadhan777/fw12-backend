@@ -18,7 +18,7 @@ const authMiddleware = (req, res, next) => {
   }
   else{
   return res.status(401).json({
-    success: true,
+    success: false,
     message: 'Unauthorized'
   })
 }

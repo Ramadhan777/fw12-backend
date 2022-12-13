@@ -15,7 +15,7 @@ exports.readAllMovieSchedulesTimes = (req, res) => {
       success: true,
       message: 'List of Movie Schedules Time',
       pageInfo,
-      movieScheduleTimes: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readMovieSchedulesTime = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      movieSchedulesTime: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createMovieSchedulesTime = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Schedule Created",
-      movieSchedulesTime: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateMovieSchedulesTime = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Schedule Updated",
-      movieSchedulesTime: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteMovieSchedulesTime = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Schedule Deleted",
-      movieSchedulesTime: data.rows
+      results: data.rows
     })
   })
 }

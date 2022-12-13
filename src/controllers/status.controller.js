@@ -15,7 +15,7 @@ exports.readAllStatus = (req, res) => {
       success: true,
       message: 'List of Status',
       pageInfo,
-      status: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readStatus = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      Status: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createStatus = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Status created successfully",
-      Status: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateStatus = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Status Updated",
-      Status: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteStatus = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Status Deleted",
-      Status: data.rows
+      results: data.rows
     })
   })
 }

@@ -15,7 +15,7 @@ exports.readProfile = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      user: data.rows
+      results: data.rows[0]
     })
   })
 }

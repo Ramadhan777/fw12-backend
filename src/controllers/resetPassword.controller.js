@@ -15,7 +15,7 @@ exports.readAllResetPasswords = (req,res) => {
       success: true,
       message: 'List of Reset Passwords',
       pageInfo,
-      resetPassword: result.rows
+      results: result.rows
     })
   })
 })
@@ -36,7 +36,7 @@ exports.readResetPassword = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      resetPassword: data.rows
+      results: data.rows[0]
     })
   })
 }
@@ -50,7 +50,7 @@ exports.createResetPassword = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Genre created successfully",
-      resetPassword: data.rows[0]
+      results: data.rows[0]
     })
   })
 }
@@ -71,7 +71,7 @@ exports.updateResetPassword = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Genre Updated",
-      resetPassword: data.rows
+      results: data.rows
     })
   })
 }
@@ -92,7 +92,7 @@ exports.deleteResetPassword = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Movie Genre Deleted",
-      resetPassword: data.rows
+      results: data.rows
     })
   })
 }

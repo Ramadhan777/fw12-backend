@@ -1,6 +1,6 @@
 const filter = (data, sortable, countAllData, res, cb) => {
   data.page = parseInt(data.page) || 1
-  data.limit = parseInt(data.limit) || 5
+  data.limit = parseInt(data.limit) || 8
   data.search = data.search || ''
   data.sortBy = (sortable.includes(data.sortBy) && data.sortBy) || 'createdAt'
   data.sort = data.sort || 'ASC'
