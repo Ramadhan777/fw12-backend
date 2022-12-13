@@ -1,8 +1,6 @@
 const routes = require('express').Router()
 const authMiddleware = require('../middleware/auth.middleware')
-const uploadMiddleware = require('../middleware/upload.middleware')
 const { createTransactionAndReservedSeat } = require('../controllers/transactions.controller')
-const {updateUser} = require('../controllers/users.controller')
 
 routes.use('/users', require('./users.router'))
 routes.use('/resetPassword', require('./resetPassword.router'))

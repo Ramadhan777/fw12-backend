@@ -1,4 +1,4 @@
-const {insertTransaction, selectAllTransactions, selectTransaction, patchTransaction, deleteTransaction, countAllTransactions} = require('../models/Transactions.model')
+const {insertTransaction, selectAllTransactions, selectTransaction, patchTransaction, deleteTransaction, countAllTransactions} = require('../models/transactions.model')
 const { insertReservedSeat } = require('../models/reservedSeat.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
