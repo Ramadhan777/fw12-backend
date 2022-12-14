@@ -56,7 +56,7 @@ exports.createTransaction = (req, res) => {
 }
 
 exports.createTransactionAndReservedSeat = (req, res) => {
-  req.body.userID = req.userData.id
+  req.body.userId = req.userData.id
 
   insertTransaction(req.body, (err, data) => {
     if(err){

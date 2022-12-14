@@ -25,9 +25,9 @@ exports.selectTransaction = (data, callback) => {
 }
 
 exports.insertTransaction = (data, callback) => {
-  const sql = 'INSERT INTO transactions ("userID", "bookingDate", "movieId", "cinemaId", "movieScheduleID", "fullName", "email", "phoneNumber", "statusId", "paymentMethodId") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *';
+  const sql = 'INSERT INTO transactions ("userId", "bookingDate", "movieId", "cinemaId", "fullName", "email", "phoneNumber", "paymentMethodId", "bookingTime") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *';
 
-  const values = [data.userID, data.bookingDate, data.movieId, data.cinemaId, data.movieScheduleID, data.fullName, data.email, data.phoneNumber, data.statusId]
+  const values = [data.userId, data.bookingDate, data.movieId, data.cinemaId, data.fullName, data.email, data.phoneNumber, data.bookingTime]
 
   return db.query(sql, values, callback)
 }
