@@ -16,6 +16,15 @@ exports.selectAllMoviesByGenre = (filter, callback) => {
   return db.query(sql, values, callback);
 };
 
+
+exports.selectMovieByDateAndCIty = (data, callback) => {
+  const sql = `SELECT c.picture, c.name, c.address, array_agg(mst.time) as schedules FROM movies m LEFT JOIN "movieSchedules" ms ON ms."movieId" = m.id LEFT JOIN cinemas c ON ms."cinemaId" = c.id LEFT JOIN "movieSchedulesTimes" mst ON ms.id = mst."movieScheduleId" WHERE c.city = $1 AND $2 BETWEEN ms."startDate" AND ms."endDate" GROUP BY c.picture, c.name, c.address`
+
+  const values = [data.city, data.date]
+
+  return db.query(sql, values, callback)
+}
+
 exports.countAllMovies = (filter, callback) => {
   const sql = `SELECT COUNT(*) AS "totalData" FROM movies WHERE title LIKE $1`;
 

@@ -9,6 +9,7 @@ const {
   countAllMovies,
   selectAllMoviesByGenre,
   countAllMoviesByGenre,
+  selectMovieByDateAndCIty,
 } = require("../models/movies.model");
 const errorHandler = require("../helpers/errorHandler");
 const filter = require("../helpers/filter.helper");
@@ -93,22 +94,28 @@ exports.readAllMoviesByGenre = (req, res) => {
       results: data.rows,
     });
   });
-
-  // filter(req.query, sortable, countAllMoviesByGenre, res, (filter, pageInfo) => {
-  //   selectAllMoviesByGenre(filter, (err, result) => {
-  //     if (err) {
-  //       return errorHandler(err, res);
-  //     }
-
-  //     return res.status(200).json({
-  //       success: true,
-  //       message: "List of Movies",
-  //       pageInfo,
-  //       results: result.rows,
-  //     });
-  //   });
-  // });
 };
+
+exports.readSchdeuleByDateAndCity = (req, res) => {
+  selectMovieByDateAndCIty(req.body, (err, data) => {
+    if(err){
+      return errorHandler(err, res)
+    }
+
+    if(data.rows.length === 0){
+      return res.status(400).json({
+        success: false,
+        message: "Movie not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "List schedules",
+      results: data.rows
+    })
+  })
+}
 
 exports.readMovie = (req, res) => {
   selectMovie(req.params, (err, data) => {

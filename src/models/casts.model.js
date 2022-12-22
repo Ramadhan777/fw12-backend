@@ -1,4 +1,4 @@
-const db = require('../helpers/db.helper')
+  const db = require('../helpers/db.helper')
 
 exports.selectAllCasts = (filter, callback) => {
   const sql = `SELECT * FROM casts WHERE name LIKE $1 ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $2 OFFSET $3`
@@ -44,6 +44,6 @@ exports.deleteCast = (param, callback) => {
   const sql = `DELETE FROM casts WHERE id=$1 RETURNING *`
 
   const values = [param.id]
-  
+
   return db.query(sql, values, callback)
 }

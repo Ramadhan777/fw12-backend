@@ -90,7 +90,7 @@ exports.updateUser = (req,  res) => {
 
     return res.status(200).json({
       success: true,
-      message: "User Updated",
+      message: "Profile Updated",
       user : data.rows
     })
   })

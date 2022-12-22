@@ -1,6 +1,5 @@
 const { selectUserByEmail, insertUser, patchUser } = require('../models/users.model')
-const { insertResetPassword, selectResetPasswordByEmailAndCode, deleteResetPassword
- } = require('../models/resetPassword.model')
+const { insertResetPassword, selectResetPasswordByEmailAndCode, deleteResetPassword } = require('../models/resetPassword.model')
 const jwt = require('jsonwebtoken')
 const { errorHandler } = require('../helpers/errorHandler')
 
@@ -81,7 +80,7 @@ exports.forgotPassword = (req, res) => {
     } else{
       return res.status(400).json({
         success: false,
-        message: "Request Failed, User not found"
+        message: "Request Failed, email invalid"
       })
     }
 

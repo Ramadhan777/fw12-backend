@@ -21,6 +21,7 @@ CREATE TABLE "resetPassword" (
     "updatedAt"     TIMESTAMPTZ
 );
 
+
 CREATE TABLE "movies" (
     "id"            INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     "title"         VARCHAR(255),
