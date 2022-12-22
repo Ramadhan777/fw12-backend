@@ -97,7 +97,7 @@ exports.readAllMoviesByGenre = (req, res) => {
 };
 
 exports.readSchdeuleByDateAndCity = (req, res) => {
-  selectMovieByDateAndCIty(req.body, (err, data) => {
+  selectMovieByDateAndCIty(req.query, (err, data) => {
     if(err){
       return errorHandler(err, res)
     }
