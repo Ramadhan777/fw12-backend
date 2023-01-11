@@ -1,7 +1,7 @@
 const { selectUserByEmail, insertUser, patchUser } = require('../models/users.model')
 const { insertResetPassword, selectResetPasswordByEmailAndCode, deleteResetPassword } = require('../models/resetPassword.model')
 const jwt = require('jsonwebtoken')
-const { errorHandler } = require('../helpers/errorHandler')
+const errorHandler = require('../helpers/errorHandler')
 
 exports.login = (req, res) => {
   selectUserByEmail(req.body, (error, {rows}) => {
