@@ -58,14 +58,14 @@ exports.selectMovieByNow = (filter, callback) => {
 };
 
 exports.selectMovieByMonth = (filter, data, callback) => {
-  const sql = `SELECT m.*, string_agg(g.name, ', ') as genre FROM "movies" m LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN "genre" g ON g.id = mg."genreId" WHERE title LIKE $5 AND date_part('year',"releaseDate")::TEXT = COALESCE(NULLIF($1 ,''), date_part('year', current_date)::TEXT) AND date_part('month',"releaseDate")::TEXT = COALESCE(NULLIF($2 ,''), date_part('month', current_date)::TEXT) GROUP BY m.id ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $3 OFFSET $4`;
-
+  const sql = `SELECT m.*, string_agg(g.name, ', ') as genre FROM "movies" m LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN "genre" g ON g.id = mg."genreId" WHERE title LIKE $3 AND date_part('year',"releaseDate")::TEXT = COALESCE(NULLIF($1 ,''), date_part('year', current_date)::TEXT) AND date_part('month',"releaseDate")::TEXT = COALESCE(NULLIF($2 ,''), date_part('month', current_date)::TEXT) GROUP BY m.id `;
+  // ORDER BY "${filter.sortBy}" ${filter.sort} LIMIT $3 OFFSET $4
   const values = [
     data.year,
     data.month,
-    filter.limit,
-    filter.offset,
     `%${filter.search}%`,
+    // filter.limit,
+    // filter.offset,
   ];
 
   return db.query(sql, values, callback);
