@@ -33,7 +33,7 @@ exports.selectUserByEmail = (data, callback) => {
 }
 
 exports.insertUser = (data, callback) => {
-  const sql = 'INSERT INTO users ("firstNamez", "lastName", "phoneNumber", "email", "password", "role") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
+  const sql = 'INSERT INTO users ("firstName", "lastName", "phoneNumber", "email", "password", "role") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
 
   const values = [data.firstName, data.lastName, data.phoneNumber, data.email, data.password, 'user']
 
