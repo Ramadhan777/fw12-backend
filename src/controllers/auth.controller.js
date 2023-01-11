@@ -13,7 +13,8 @@ exports.login = (req, res) => {
           success: true,
           message: 'login success',
           results: {
-            token
+            token,
+            role: user.role
           }
         })
       }
@@ -47,7 +48,8 @@ exports.register = (req, res) => {
       success: true,
       message: "User created successfully",
       results: {
-        token
+        token,
+        role: user.role
       }
     })
     })
