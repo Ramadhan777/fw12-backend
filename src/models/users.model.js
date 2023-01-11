@@ -33,17 +33,17 @@ exports.selectUserByEmail = (data, callback) => {
 }
 
 exports.insertUser = (data, callback) => {
-  const sql = 'INSERT INTO users ("firstName", "lastName", "phoneNumber", "email", "password") VALUES ($1, $2, $3, $4, $5) RETURNING *';
+  const sql = 'INSERT INTO users ("firstNamez", "lastName", "phoneNumber", "email", "password", "role") VALUES ($1, $2, $3, $4, $5, $6) RETURNING *';
 
-  const values = [data.firstName, data.lastName, data.phoneNumber, data.email, data.password]
+  const values = [data.firstName, data.lastName, data.phoneNumber, data.email, data.password, 'user']
 
   return db.query(sql, values, callback)
 }
 
 exports.patchUser = (data, id, callback) => {
-  const sql = `UPDATE users SET "picture"=COALESCE(NULLIF($1,''), "picture"), "firstName"=COALESCE(NULLIF($2,''), "firstName"), "lastName"=COALESCE(NULLIF($3,''), "lastName"), "phoneNumber"=COALESCE(NULLIF($4, ''), "phoneNumber"), "email"=COALESCE(NULLIF($5, ''), "email"), "password"=COALESCE(NULLIF($6,''), "password")  WHERE id=$7 RETURNING *`;
+  const sql = `UPDATE users SET "picture"=COALESCE(NULLIF($1,''), "picture"), "firstName"=COALESCE(NULLIF($2,''), "firstName"), "lastName"=COALESCE(NULLIF($3,''), "lastName"), "phoneNumber"=COALESCE(NULLIF($4, ''), "phoneNumber"), "email"=COALESCE(NULLIF($5, ''), "email"), "password"=COALESCE(NULLIF($6,''), "password") , "role"=COALESCE(NULLIF($6,''), "role")  WHERE id=$8 RETURNING *`;
 
-  const values = [data.picture, data.firstName, data.lastName, data.phoneNumber, data.email, data.password, id]
+  const values = [data.picture, data.firstName, data.lastName, data.phoneNumber, data.email, data.password, data.role, id]
 
   return db.query(sql, values, callback)
 }
