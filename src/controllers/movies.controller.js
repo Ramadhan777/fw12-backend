@@ -13,7 +13,7 @@ const {
 } = require("../models/movies.model");
 const errorHandler = require("../helpers/errorHandler");
 const filter = require("../helpers/filter.helper");
-const fs = require('fs')
+const fs = require("fs");
 
 exports.readAllMovies = (req, res) => {
   const sortable = [
@@ -52,9 +52,35 @@ exports.readAllMoviesByGenre = (req, res) => {
     "updatedAt",
   ];
 
-  filter(req.query, sortable, countAllMovies, res, (filter, pageInfo) => {
+  filter(
+    req.query,
+    sortable,
+    countAllMoviesByGenre,
+    res,
+    (filter, pageInfo) => {
+      selectAllMoviesByGenre(filter, (err, data) => {
+        if (err) {
+          return errorHandler(err, res);
+        }
 
-  selectAllMoviesByGenre(filter, (err, data) => {
+        if (data.rows.length === 0) {
+          return res.status(400).json({
+            success: false,
+            message: "Movie not found",
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          pageInfo,
+          results: data.rows,
+        });
+      });
+    }
+  );
+};
+
+exports.readSchdeuleByDateAndCity = (req, res) => {
+  selectMovieByDateAndCIty(req.query, (err, data) => {
     if (err) {
       return errorHandler(err, res);
     }
@@ -65,34 +91,14 @@ exports.readAllMoviesByGenre = (req, res) => {
         message: "Movie not found",
       });
     }
-    return res.status(200).json({
-      success: true,
-      pageInfo,
-      results: data.rows,
-    });
-  });})
-};
-
-exports.readSchdeuleByDateAndCity = (req, res) => {
-  selectMovieByDateAndCIty(req.query, (err, data) => {
-    if(err){
-      return errorHandler(err, res)
-    }
-
-    if(data.rows.length === 0){
-      return res.status(400).json({
-        success: false,
-        message: "Movie not found",
-      });
-    }
 
     return res.status(200).json({
       success: true,
       message: "List schedules",
-      results: data.rows
-    })
-  })
-}
+      results: data.rows,
+    });
+  });
+};
 
 exports.readMovie = (req, res) => {
   selectMovie(req.params, (err, data) => {
@@ -157,7 +163,8 @@ exports.readMovieByNow = (req, res) => {
 
     pageInfo.totalData = parseInt(data.rows.length);
     pageInfo.totalPage = Math.ceil(pageInfo.totalData / filter.limit);
-    pageInfo.nextPage = req.query.page < pageInfo.totalPage ? req.query.page + 1 : null;
+    pageInfo.nextPage =
+      req.query.page < pageInfo.totalPage ? req.query.page + 1 : null;
     pageInfo.prevPage = req.query.page > 1 ? req.query.page - 1 : null;
 
     return res.status(200).json({
@@ -204,7 +211,8 @@ exports.readMovieByMonth = (req, res) => {
 
     pageInfo.totalData = parseInt(result.rows.length);
     pageInfo.totalPage = Math.ceil(pageInfo.totalData / filter.limit);
-    pageInfo.nextPage = req.query.page < pageInfo.totalPage ? req.query.page + 1 : null;
+    pageInfo.nextPage =
+      req.query.page < pageInfo.totalPage ? req.query.page + 1 : null;
     pageInfo.prevPage = req.query.page > 1 ? req.query.page - 1 : null;
 
     return res.status(200).json({
@@ -217,8 +225,8 @@ exports.readMovieByMonth = (req, res) => {
 };
 
 exports.createMovie = (req, res) => {
-  if(req.file){
-    req.body.picture = req.file.filename
+  if (req.file) {
+    req.body.picture = req.file.filename;
   }
 
   insertMovie(req.body, (err, data) => {
@@ -236,23 +244,23 @@ exports.createMovie = (req, res) => {
 
 exports.updateMovie = (req, res) => {
   selectMovie(req.params, (err, data) => {
-    if(err){
-      return errorHandler(err, res)
+    if (err) {
+      return errorHandler(err, res);
     }
-    if(data.rows.length){
+    if (data.rows.length) {
       const [movie] = data.rows;
-      if(movie.picture){
-        fs.rm("uploads/movie/" + movie.picture, {force: true}, (err) => {
-          if(err){
-            return errorHandler(err, res)
+      if (movie.picture) {
+        fs.rm("uploads/movie/" + movie.picture, { force: true }, (err) => {
+          if (err) {
+            return errorHandler(err, res);
           }
-        })
+        });
       }
     }
-  })
+  });
 
-  if(req.file){
-    req.body.picture = req.file.filename
+  if (req.file) {
+    req.body.picture = req.file.filename;
   }
 
   patchMovie(req.body, req.params, (err, data) => {
