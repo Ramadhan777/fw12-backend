@@ -52,24 +52,7 @@ exports.readAllMoviesByGenre = (req, res) => {
     "updatedAt",
   ];
 
-  req.query.page = parseInt(req.query.page) || 1;
-  req.query.limit = parseInt(req.query.limit) || 8;
-  req.query.search = req.query.search || "";
-  req.query.sortBy =
-    (sortable.includes(req.query.sortBy) && req.query.sortBy) || "id";
-  req.query.sort = req.query.sort || "ASC";
-
-  const filter = {
-    limit: req.query.limit,
-    offset: parseInt(req.query.page - 1) * req.query.limit,
-    search: req.query.search,
-    sort: req.query.sort,
-    sortBy: req.query.sortBy,
-  };
-
-  const pageInfo = {
-    page: req.query.page,
-  };
+  filter(req.query, sortable, countAllMovies, res, (filter, pageInfo) => {
 
   selectAllMoviesByGenre(filter, (err, data) => {
     if (err) {
@@ -82,18 +65,12 @@ exports.readAllMoviesByGenre = (req, res) => {
         message: "Movie not found",
       });
     }
-
-    pageInfo.totalData = parseInt(data.rows.length);
-    pageInfo.totalPage = Math.ceil(pageInfo.totalData / filter.limit);
-    pageInfo.nextPage = req.query.page < pageInfo.totalPage ? req.query.page + 1 : null;
-    pageInfo.prevPage = req.query.page > 1 ? req.query.page - 1 : null;
-
     return res.status(200).json({
       success: true,
       pageInfo,
       results: data.rows,
     });
-  });
+  });})
 };
 
 exports.readSchdeuleByDateAndCity = (req, res) => {
