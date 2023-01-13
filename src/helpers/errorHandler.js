@@ -2,6 +2,12 @@ const errorHandler = (err, res) => {
   if(err) {
     console.log(err)
 
+    if(err.message.includes('unique constraint "phoneNumber"')){
+      return res.status(400).json({
+        success: false,
+        message: "Phone number already used"
+      })
+    }
     if(err.message.includes('unique constraint "email"')){
       return res.status(400).json({
         success: false,
