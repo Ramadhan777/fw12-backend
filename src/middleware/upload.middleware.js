@@ -1,22 +1,43 @@
 const multer = require("multer");
 const errorHandler = require("../helpers/errorHandler");
 const fs = require("fs");
+const cloudinary = require('cloudinary').v2
+const { CloudinaryStorage } = require('multer-storage-cloudinary')
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const dirPath = "./uploads/profile";
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath);
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     const dirPath = "./uploads";
+//     if (!fs.existsSync(dirPath)) {
+//       fs.mkdirSync(dirPath);
+//     }
+//     cb(null, dirPath);
+//   },
+//   filename: (req, file, cb) => {
+//     const extension = file.originalname.split(".");
+//     const ext = extension[extension.length - 1];
+//     const name = `${new Date().getDate()}_${new Date().getTime()}.${ext}`;
+//     cb(null, name);
+//   },
+// });
+
+cloudinary.config({
+  cloud_name : 'fw12',
+  api_key: '325576439688832',
+  api_secret: '9xArlQws6EPu_lO54a96d9JC4ZM'
+})
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'Tiku_Picture',
+    format: async (req, file) => 'png',
+    public_id: (req, file) => {
+      const randomNumber = Math.round(Math.random() * 90000)
+      const fileName = `${randomNumber}${Date.now()}`
+      return fileName
     }
-    cb(null, dirPath);
-  },
-  filename: (req, file, cb) => {
-    const extension = file.originalname.split(".");
-    const ext = extension[extension.length - 1];
-    const name = `${new Date().getDate()}_${new Date().getTime()}.${ext}`;
-    cb(null, name);
-  },
-});
+  }
+})
 
 const fileFilter = (req, file, cb) => {
   if (

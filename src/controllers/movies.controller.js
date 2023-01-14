@@ -14,6 +14,7 @@ const {
 const errorHandler = require("../helpers/errorHandler");
 const filter = require("../helpers/filter.helper");
 const fs = require("fs");
+const cloudinary = require('cloudinary').v2
 
 exports.readAllMovies = (req, res) => {
   const sortable = [
@@ -226,7 +227,7 @@ exports.readMovieByMonth = (req, res) => {
 
 exports.createMovie = (req, res) => {
   if (req.file) {
-    req.body.picture = req.file.filename;
+    req.body.picture = req.file.path;
   }
 
   insertMovie(req.body, (err, data) => {
@@ -243,24 +244,20 @@ exports.createMovie = (req, res) => {
 };
 
 exports.updateMovie = (req, res) => {
-  selectMovie(req.params, (err, data) => {
-    if (err) {
-      return errorHandler(err, res);
-    }
-    if (data.rows.length) {
-      const [movie] = data.rows;
-      if (movie.picture) {
-        fs.rm("uploads/movie/" + movie.picture, { force: true }, (err) => {
-          if (err) {
-            return errorHandler(err, res);
-          }
-        });
-      }
-    }
-  });
-
+  
   if (req.file) {
-    req.body.picture = req.file.filename;
+    req.body.picture = req.file.path;
+    selectMovie(req.params, async (err, data) => {
+      if (err) {
+        return errorHandler(err, res);
+      }
+      if (data.rows.length) {
+        const [movie] = data.rows;
+        if (movie.picture) {
+          await cloudinary.uploader.destroy(movie.picture.slice(57,88))
+        }
+      }
+    });
   }
 
   patchMovie(req.body, req.params, (err, data) => {
@@ -284,7 +281,7 @@ exports.updateMovie = (req, res) => {
 };
 
 exports.deleteMovie = (req, res) => {
-  deleteMovie(req.params, (err, data) => {
+  deleteMovie(req.params, async (err, data) => {
     if (err) {
       return errorHandler(err, res);
     }
@@ -295,6 +292,8 @@ exports.deleteMovie = (req, res) => {
         message: "Movie doesn't exist",
       });
     }
+
+    await cloudinary.uploader.destroy(data.rows[0].picture.slice(57,88))
 
     return res.status(200).json({
       success: true,

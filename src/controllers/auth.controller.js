@@ -2,12 +2,13 @@ const { selectUserByEmail, insertUser, patchUser } = require('../models/users.mo
 const { insertResetPassword, selectResetPasswordByEmailAndCode, deleteResetPassword } = require('../models/resetPassword.model')
 const jwt = require('jsonwebtoken')
 const errorHandler = require('../helpers/errorHandler')
+const argon = require('argon2')
 
 exports.login = (req, res) => {
-  selectUserByEmail(req.body, (error, {rows}) => {
+  selectUserByEmail(req.body, async (error, {rows}) => {
     if(rows.length){
       const [user] = rows;
-      if(req.body.password === user.password){
+      if(await argon.verify(user.password, req.body.password)){
         const token = jwt.sign({id: user.id}, 'backend-secret')
         return res.status(200).json({
           success: true,
@@ -35,7 +36,8 @@ exports.login = (req, res) => {
   })
 }
 
-exports.register = (req, res) => {
+exports.register = async (req, res) => {
+  req.body.password = await argon.hash(req.body.password)
   insertUser(req.body, (error, data) => {
     if(error){
       return errorHandler(error, res)

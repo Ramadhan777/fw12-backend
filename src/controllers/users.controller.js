@@ -2,6 +2,7 @@ const {insertUser, selectAllUsers, selectUser, patchUser, deleteUser, countAllUs
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
 const fs = require('fs')
+const cloudinary = require('cloudinary').v2
 
 exports.readAllUsers = (req, res) => {
   const sortable = ['firstName','lastName', 'email', 'createdAt', 'updatedAt']
@@ -57,20 +58,15 @@ exports.createUser = (req, res) => {
 
 exports.updateUser = (req,  res) => {
   if(req.file){
-    req.body.picture = req.file.filename
-    selectUser(req.userData.id, (err, data) => {
+    req.body.picture = req.file.path
+    selectUser(req.userData.id, async (err, data) => {
       if(err){
         return errorHandler(err, res)
       }
       if(data.rows.length){
         const [user] = data.rows;
         if(user.picture){
-          console.log(user.picture)
-          fs.rm("uploads/profile/" + user.picture, {force: true}, (err) => {
-            if(err){
-              return errorHandler(err, res)
-            }
-          })
+         await cloudinary.uploader.destroy(user.picture.slice(57,88))
         }
       }
     })
