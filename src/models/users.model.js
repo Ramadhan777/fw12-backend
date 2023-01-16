@@ -48,6 +48,15 @@ exports.patchUser = (data, id, callback) => {
   return db.query(sql, values, callback)
 }
 
+
+exports.uploadImage = (data, id, callback) => {
+  const sql = `UPDATE users SET "picture"=COALESCE(NULLIF($1, ''), "picture") WHERE id = $2 RETURNING *`
+
+  const values = [data.picture]
+
+  return db.query(sql, values, callback)
+}
+
 exports.deleteUser = (id, callback) => {
   const sql = `DELETE FROM users WHERE id=$1 RETURNING *`
 

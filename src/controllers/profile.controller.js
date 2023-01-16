@@ -1,4 +1,4 @@
-const { selectUser } = require('../models/users.model')
+const { selectUser, uploadImage } = require('../models/users.model')
 
 exports.readProfile = (req, res) => {
   selectUser(req.userData.id, (error, data) => {
@@ -16,6 +16,42 @@ exports.readProfile = (req, res) => {
     return res.status(200).json({
       success: true,
       results: data.rows[0]
+    })
+  })
+}
+
+exports.uploadImage = (req, res) => {
+  if(req.file){
+    req.body.picture = req.file.path
+    selectUser(req.userData.id, async (err, data) => {
+      if(err){
+        return errorHandler(err, res)
+      }
+      if(data.rows.length){
+        const [user] = data.rows;
+        if(user.picture){
+         await cloudinary.uploader.destroy(user.picture.slice(57,88))
+        }
+      }
+    })
+  }
+
+  uploadImage(req.body, req.userData.id, (error, data) => {
+    if(error){
+      return errorHandler(error, res)
+    }
+
+    if(data.rows.length === 0){
+      return res.status(400).json({
+        success: false,
+        message: "User doesn't exist"
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile Updated",
+      user : data.rows
     })
   })
 }
