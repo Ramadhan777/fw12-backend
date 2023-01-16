@@ -18,7 +18,7 @@ exports.selectAllMoviesByGenre = (filter, callback) => {
 
 
 exports.selectMovieByDateAndCIty = (data, callback) => {
-  const sql = `SELECT c.id, c.picture, c.name, c.address, array_agg(mst.time) as schedules FROM movies m LEFT JOIN "movieSchedules" ms ON ms."movieId" = m.id LEFT JOIN cinemas c ON ms."cinemaId" = c.id LEFT JOIN "movieSchedulesTimes" mst ON ms.id = mst."movieScheduleId" WHERE m.id = $1 AND c.city = $2 AND $3 BETWEEN ms."startDate" AND ms."endDate" GROUP BY c.id,c.picture, c.name, c.address`
+  const sql = `SELECT c.id, c.picture, c.name, c.address, array_agg(mst.time) as schedules, ms.price FROM movies m LEFT JOIN "movieSchedules" ms ON ms."movieId" = m.id LEFT JOIN cinemas c ON ms."cinemaId" = c.id LEFT JOIN "movieSchedulesTimes" mst ON ms.id = mst."movieScheduleId" WHERE m.id = $1 AND c.city = $2 AND $3 BETWEEN ms."startDate" AND ms."endDate" GROUP BY c.id,c.picture, c.name, c.address`
 
   const values = [data.movieId, data.city, data.date]
 
