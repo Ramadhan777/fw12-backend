@@ -38,7 +38,7 @@ exports.uploadImage = (req, res) => {
     })
   }
 
-  console.log(reg.body.picture)
+  console.log(req.body.picture)
 
   uploadImage(req.body, req.userData.id, (error, data) => {
     if(error){
