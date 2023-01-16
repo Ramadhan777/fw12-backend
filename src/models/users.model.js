@@ -52,6 +52,7 @@ exports.patchUser = (data, id, callback) => {
 exports.uploadImage = (data, id, callback) => {
   const sql = `UPDATE users SET "picture"=COALESCE(NULLIF($1, ''), "picture") WHERE id = $2 RETURNING *`
 
+console.log(data.picture)
   const values = [data.picture, id]
 
   return db.query(sql, values, callback)

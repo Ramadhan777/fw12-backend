@@ -1,5 +1,6 @@
 const { selectUser, uploadImage } = require('../models/users.model')
 const errorHandler = require('../helpers/errorHandler')
+const cloudinary = require('cloudinary').v2
 
 exports.readProfile = (req, res) => {
   selectUser(req.userData.id, (error, data) => {
@@ -36,6 +37,8 @@ exports.uploadImage = (req, res) => {
       }
     })
   }
+
+  console.log(reg.body.picture)
 
   uploadImage(req.body, req.userData.id, (error, data) => {
     if(error){
