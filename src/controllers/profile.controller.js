@@ -1,4 +1,5 @@
 const { selectUser, uploadImage } = require('../models/users.model')
+const errorHandler = require('../helpers/errorHandler')
 
 exports.readProfile = (req, res) => {
   selectUser(req.userData.id, (error, data) => {
