@@ -57,7 +57,6 @@ exports.createUser = (req, res) => {
 }
 
 exports.updateUser = (req,  res) => {
-  console.log(req.headers)
   if(req.file){
     req.body.picture = req.file.path
     selectUser(req.userData.id, async (err, data) => {
