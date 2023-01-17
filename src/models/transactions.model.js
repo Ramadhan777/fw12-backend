@@ -41,7 +41,7 @@ exports.patchTransaction = (data, param, callback) => {
 }
 
 exports.getSeatNum = (data, callback) => {
-  const sql = `SELECT array_agg("seatNum") as seatNum FROM transactions WHERE "movieId" = $1 AND "cinemaId" = $2`
+  const sql = `SELECT string_agg("seatNum", ', ') as seatNum   FROM transactions WHERE "movieId" = $1 AND "cinemaId" = $2`
 
   const values = [data.movieId, data.cinemaId]
 

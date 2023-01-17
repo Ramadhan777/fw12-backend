@@ -72,14 +72,14 @@ exports.createTransaction = (req, res) => {
 };
 
 exports.readSeatOrdered = (req, res) => {
-  getSeatNum(req.params, (error, data) => {
+  getSeatNum(req.query, (error, data) => {
     if (error) {
       return errorHandler(error, res);
     }
     return res.status(200).json({
       success: true,
       message: "Seat Ordered",
-      results: data.rows[0],
+      results: data.rows,
     });
   });
 }
