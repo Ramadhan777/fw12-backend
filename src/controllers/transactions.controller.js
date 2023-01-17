@@ -72,7 +72,7 @@ exports.createTransaction = (req, res) => {
 };
 
 exports.readSeatOrdered = (req, res) => {
-  getSeatNum(req.body, (error, data) => {
+  getSeatNum(req.params, (error, data) => {
     if (error) {
       return errorHandler(error, res);
     }
