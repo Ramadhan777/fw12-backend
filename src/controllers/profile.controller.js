@@ -32,13 +32,15 @@ exports.uploadImage = (req, res) => {
       if(data.rows.length){
         const [user] = data.rows;
         if(user.picture){
+          console.log('file lama '+user.picture)
+          console.log('file lama cut '+user.picture.slice(57,88))
          await cloudinary.uploader.destroy(user.picture.slice(57,88))
         }
       }
     })
   }
 
-  console.log(req.body.picture)
+  console.log('file baru ' + req.body.picture)
 
   uploadImage(req.body, req.userData.id, (error, data) => {
     if(error){
