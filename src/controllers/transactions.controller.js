@@ -79,7 +79,7 @@ exports.readSeatOrdered = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Seat Ordered",
-      results: data.rows,
+      results: data.rows[0],
     });
   });
 }
