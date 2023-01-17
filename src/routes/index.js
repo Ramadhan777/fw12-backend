@@ -1,6 +1,6 @@
 const routes = require('express').Router()
 const authMiddleware = require('../middleware/auth.middleware')
-const { createTransactionAndReservedSeat } = require('../controllers/transactions.controller')
+const { createTransaction } = require('../controllers/transactions.controller')
 
 routes.use('/users', require('./users.router'))
 routes.use('/resetPassword', require('./resetPassword.router'))
@@ -20,6 +20,6 @@ routes.use('/subscribers', require('./subscribers.router'))
 routes.use('/auth', require('./auth.router'))
 routes.use('/profile', require('./profile.router'))
 
-routes.post('/createTransaction', authMiddleware, createTransactionAndReservedSeat)
+routes.post('/createTransaction', authMiddleware, createTransaction)
 
 module.exports = routes

@@ -40,6 +40,14 @@ exports.patchTransaction = (data, param, callback) => {
   return db.query(sql, values, callback)
 }
 
+exports.getSeatNum = (data, callback) => {
+  const sql = `SELECT array_agg("seatNum") FROM transactions WHERE "movieId" = $1 AND "cinemaId" = $2`
+
+  const values = [data.movieId, data.cinemaId]
+
+  return db.query(sql, values, callback)
+}
+
 exports.deleteTransaction = (param, callback) => {
   const sql = `DELETE FROM transactions WHERE id=$1 RETURNING *`
 
