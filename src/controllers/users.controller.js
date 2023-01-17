@@ -66,6 +66,7 @@ exports.updateUser = (req,  res) => {
       if(data.rows.length){
         const [user] = data.rows;
         if(user.picture){
+          console.log(user.picture)
         //  await cloudinary.uploader.destroy(user.picture.slice(57,88))
         }
       }
