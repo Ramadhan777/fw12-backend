@@ -1,8 +1,8 @@
 const {insertUser, selectAllUsers, selectUser, patchUser, deleteUser, countAllUsers} = require('../models/users.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
-const fs = require('fs')
 const cloudinary = require('cloudinary').v2
+const argon = require('argon2')
 
 exports.readAllUsers = (req, res) => {
   const sortable = ['firstName','lastName', 'email', 'createdAt', 'updatedAt']
@@ -56,7 +56,7 @@ exports.createUser = (req, res) => {
     })
 }
 
-exports.updateUser = (req,  res) => {
+exports.updateUser = async (req,  res) => {
   if(req.file){
     req.body.picture = req.file.path
     selectUser(req.userData.id, async (err, data) => {
@@ -74,8 +74,7 @@ exports.updateUser = (req,  res) => {
     })
   }
 
-  console.log('file baru ' + req.body.picture)
-
+  req.body.password = await argon.hash(req.body.password)
 
   patchUser(req.body, req.userData.id, (error, data) => {
     if(error){
