@@ -103,7 +103,7 @@ exports.resetPassword = (req, res) => {
       if(users.length){
         const [request] = users
         const data = {
-          password
+          password: argon.hash(password)
         }
 
         if((new Date().getTime() - new Date(request.createdAt).getTime() ) > 1000 * 60 * 15){
