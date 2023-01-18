@@ -5,7 +5,8 @@ const {
   patchTransaction,
   deleteTransaction,
   countAllTransactions,
-  getSeatNum
+  getSeatNum,
+  getTransactionByUserId
 } = require("../models/transactions.model");
 const { insertReservedSeat } = require("../models/reservedSeat.model");
 const errorHandler = require("../helpers/errorHandler");
@@ -121,6 +122,27 @@ exports.updateTransaction = (req, res) => {
     });
   });
 };
+
+exports.readTransactionByUserId = (req, res) => {
+  getTransactionByUserId(req.userData.id, (error, data) => {
+    if(error){
+      return errorHandler(error, res)
+    }
+
+    if (data.rows.length === 0) {
+      return res.status(400).json({
+        success: true,
+        message: "There are no transactions",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Transaction list",
+      results: data.rows,
+    });
+  })
+}
 
 exports.deleteTransaction = (req, res) => {
   deleteTransaction(req.params, (error, data) => {

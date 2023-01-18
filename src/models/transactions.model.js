@@ -19,7 +19,7 @@ exports.countAllTransactions = (filter, callback) => {
 exports.selectTransaction = (data, callback) => {
   const sql = `SELECT * FROM transactions WHERE id=$1`
 
-  const values = [param.id]
+  const values = [data.id]
 
   return db.query(sql, values, callback)
 }
@@ -44,6 +44,14 @@ exports.getSeatNum = (data, callback) => {
   const sql = `SELECT string_agg("seatNum", ', ') as seatNum   FROM transactions WHERE "movieId" = $1 AND "cinemaId" = $2 AND "bookingTime" = $3`
 
   const values = [data.movieId, data.cinemaId, data.bookingTime]
+
+  return db.query(sql, values, callback)
+}
+
+exports.getTransactionByUserId = (id, callback) => {
+  const sql = `SELECT * FROM transactions WHERE "userId" = $1`
+
+  const values = [id]
 
   return db.query(sql, values, callback)
 }
