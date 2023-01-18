@@ -17,7 +17,7 @@ exports.countAllTransactions = (filter, callback) => {
 }
 
 exports.selectTransaction = (data, callback) => {
-  const sql = `SELECT t.*, m.title, array_agg(g.name) FROM transactions t LEFT JOIN movies m ON m.id = t."movieId" LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE t.id = $1 Group by t.id, m.title`
+  const sql = `SELECT t.*, m.title as "movieTitle", array_agg(g.name) as genre FROM transactions t LEFT JOIN movies m ON m.id = t."movieId" LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE t.id = $1 Group by t.id, m.title`
 
   const values = [data.id]
 
