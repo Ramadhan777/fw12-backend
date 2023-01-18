@@ -6,6 +6,6 @@ const {updateUser} = require('../controllers/users.controller')
 
 profileRouter.get('/', authMiddleware, readProfile)
 profileRouter.patch('/', authMiddleware, uploadMiddleware, updateUser)
-profileRouter.patch('/upload', authMiddleware, uploadMiddleware, uploadImage)
+profileRouter.patch('/upload', authMiddleware, uploadMiddleware, updateUser)
 
 module.exports = profileRouter
