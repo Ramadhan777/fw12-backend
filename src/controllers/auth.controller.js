@@ -95,7 +95,7 @@ exports.resetPassword = (req, res) => {
   const { password, confirmPassword } = req.body
 
   if(password === confirmPassword){
-    selectResetPasswordByEmailAndCode(req.body, (err, {rows : users}) => {
+    selectResetPasswordByEmailAndCode(req.body, async (err, {rows : users}) => {
       if(err){
         return errorHandler(err, res)
       }
@@ -103,7 +103,7 @@ exports.resetPassword = (req, res) => {
       if(users.length){
         const [request] = users
         const data = {
-          password: argon.hash(password)
+          password: await argon.hash(password)
         }
 
         if((new Date().getTime() - new Date(request.createdAt).getTime() ) > 1000 * 60 * 15){
