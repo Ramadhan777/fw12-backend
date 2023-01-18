@@ -49,7 +49,7 @@ exports.getSeatNum = (data, callback) => {
 }
 
 exports.getTransactionByUserId = (id, callback) => {
-  const sql = `SELECT t.*, m.title as movieTitle, c.name as cinema, c.picture as cinemaPicture FROM transactions t LEFT JOIN movies m ON m.id = t."movieId" LEFT JOIN cinemas c ON c.id = t."cinemaId" WHERE "userId" = $1`
+  const sql = `SELECT t.*, m.title as "movieTitle", c.name as cinema, c.picture as cinemaPicture FROM transactions t LEFT JOIN movies m ON m.id = t."movieId" LEFT JOIN cinemas c ON c.id = t."cinemaId" WHERE "userId" = $1`
 
   const values = [id]
 
