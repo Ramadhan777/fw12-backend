@@ -34,7 +34,7 @@ exports.uploadImage = (req, res) => {
         if(user.picture){
           console.log('file lama '+user.picture)
           console.log('file lama cut '+user.picture.slice(57,88))
-         await cloudinary.uploader.destroy(user.picture.slice(57,88))
+        //  await cloudinary.uploader.destroy(user.picture.slice(57,88))
         }
       }
     })
