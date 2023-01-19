@@ -74,8 +74,6 @@ exports.updateUser = async (req,  res) => {
     })
   }
 
-  req.body.password = await argon.hash(req.body.password)
-
   patchUser(req.body, req.userData.id, (error, data) => {
     if(error){
       return errorHandler(error, res)
