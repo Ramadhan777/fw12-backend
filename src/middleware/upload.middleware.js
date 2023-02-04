@@ -64,6 +64,9 @@ const uploadMiddleware = upload.single("picture");
 module.exports = (req, res, next) => {
   uploadMiddleware(req, res, (err) => {
     if (err) {
+      console.log(process.env.CLOUD_NAME)
+      console.log(process.env.API_KEY)
+      console.log(process.env.API_SECRET)
       return errorHandler(err, res);
     }
     next();
