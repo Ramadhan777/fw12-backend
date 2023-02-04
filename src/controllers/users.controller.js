@@ -68,11 +68,19 @@ exports.updateUser = async (req,  res) => {
         if(user.picture){
           console.log('file lama '+user.picture)
           console.log('file lama cut '+user.picture.slice(57,88))
-        //  await cloudinary.uploader.destroy(user.picture.slice(57,88))
+          await cloudinary.uploader.destroy(user.picture.slice(57,88))
         }
+      } else {
+        return res.status(400).json({
+          success: false,
+          message: "User doesn't exist"
+        })
       }
-      
     })
+  }
+  
+  if(req.body.password){
+    req.body.password = await argon.hash(req.body.password)
   }
 
   patchUser(req.body, req.userData.id, (error, data) => {

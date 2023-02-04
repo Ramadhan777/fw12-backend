@@ -50,9 +50,9 @@ exports.selectMovie = (param, callback) => {
 };
 
 exports.selectMovieByNow = (filter, callback) => {
-  const sql = `SELECT DISTINCT(m.id), m.*,  string_agg(DISTINCT(g.name), ', ') as genre FROM "movies" m JOIN "movieSchedules" ms ON ms."movieId" = m.id JOIN "cinemas" c ON ms."cinemaId" = c.id LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE current_date BETWEEN "startDate" AND "endDate" GROUP BY m.id, ms.id, c.id ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $1 OFFSET $2;`;
+  const sql = `SELECT DISTINCT(m.id), m.*,  string_agg(DISTINCT(g.name), ', ') as genre FROM "movies" m JOIN "movieSchedules" ms ON ms."movieId" = m.id JOIN "cinemas" c ON ms."cinemaId" = c.id LEFT JOIN "movieGenre" mg ON mg."movieId" = m.id LEFT JOIN genre g ON g.id = mg."genreId" WHERE current_date BETWEEN "startDate" AND "endDate" GROUP BY m.id, ms.id, c.id ORDER BY "${filter.sortBy}" ${filter.sort}  LIMIT $1 OFFSET $2`;
 
-  const values = [filter.limit, filter.offset, `%${filter.search}%`];
+  const values = [filter.limit, filter.offset];
 
   return db.query(sql, values, callback);
 };

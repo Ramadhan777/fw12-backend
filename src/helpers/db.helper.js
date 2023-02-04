@@ -8,4 +8,13 @@ const db = new Pool({
   connectionString,
 })
 
+db.connect((err) =>{
+  if(err) {
+    console.log(err)
+    console.log('database is not connect')
+  } else{
+    console.log('database connected')
+  }
+})
+
 module.exports = db
