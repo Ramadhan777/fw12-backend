@@ -32,7 +32,7 @@ exports.insertPaymentMethod = (data, callback) => {
   return db.query(sql, values, callback)
 }
 
-exports.patchUser = (data, param, callback) => {
+exports.patchPaymentMethod = (data, param, callback) => {
   const sql = `UPDATE "paymentMethod" SET "picture"=COALESCE(NULLIF($1,''), "picture"), "name"=COALESCE(NULLIF($2,''), "name") WHERE id=$3 RETURNING *`;
 
   const values = [data.picture, data.name, param.id]

@@ -1,6 +1,7 @@
 const errorHandler = require('../helpers/errorHandler')
 const { selectAllCinemas, selectCinema, insertCinema, patchCinema, deleteCinema, countAllCinemas } = require('../models/cinemas.model')
 const filter = require('../helpers/filter.helper')
+const cloudinary = require('cloudinary').v2
 
 exports.readAllCinemas = (req, res) => {
   const sortable = ['name', 'address', 'city','createdAt', 'updatedAt']
@@ -42,6 +43,10 @@ exports.readCinema = (req, res) => {
 }
 
 exports.createCinema = (req, res) => {
+  if(req.file){
+    req.body.picture = req.file.path
+  }
+
   insertCinema(req.body, (err, data) => {
     if(err) {
       return errorHandler(err, res)
@@ -56,6 +61,24 @@ exports.createCinema = (req, res) => {
 }
 
 exports.updateCinema = (req, res) => {
+  if(req.file){
+    req.body.picture = req.file.path
+
+    selectCinema(req.params, async (err, data) => {
+      if(err) {
+        return errorHandler(err, res)
+      }
+
+      if(data.rows.length){
+        const [cinema] = data.rows;
+        if(cinema.picture){
+          console.log(`file lama ${cinema.picture}`)
+          console.log(`file lama cut ${cinema.picture.slice(57,88)}`)
+          await cloudinary.uploader.destroy(cinema.picture.slice(57,88))
+        }
+      }
+    })
+  }
   patchCinema(req.body, req.params, (err, data) => {
     if(err){
       return errorHandler(err, res)

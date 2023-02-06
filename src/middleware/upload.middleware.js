@@ -42,12 +42,13 @@ const fileFilter = (req, file, cb) => {
   if (
     file.mimetype === "image/png" ||
     file.mimetype === "image/jpg" ||
+    file.mimetype === "image/svg+xml" ||
     file.mimetype === "image/jpeg"
   ) {
     cb(null, true);
   } else {
     cb(null, false);
-    return cb(new Error("Only .png, .jpg and .jpeg format allowed"))
+    return cb(new Error("Only .png, .jpg, .svg and .jpeg format allowed"))
   }
 };
 
@@ -64,9 +65,6 @@ const uploadMiddleware = upload.single("picture");
 module.exports = (req, res, next) => {
   uploadMiddleware(req, res, (err) => {
     if (err) {
-      console.log(process.env.CLOUD_NAME)
-      console.log(process.env.API_KEY)
-      console.log(process.env.API_SECRET)
       return errorHandler(err, res);
     }
     next();

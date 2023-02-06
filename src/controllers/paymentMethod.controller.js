@@ -1,6 +1,7 @@
 const { selectAllPaymentMethods, selectPaymentMethod, insertPaymentMethod, patchPaymentMethod, deletePaymentMethod, countAllPaymentMethods } = require('../models/paymentMethod.model')
 const errorHandler = require('../helpers/errorHandler')
 const filter = require('../helpers/filter.helper')
+const cloudinary = require('cloudinary').v2
 
 exports.readAllPaymentMethods = (req, res) => {
   const sortable = ['name', 'createdAt', 'updatedAt']
@@ -42,6 +43,10 @@ exports.readPaymentMethod = (req, res) => {
 }
 
 exports.createPaymentMethod = (req, res) => {
+  if(req.file){
+    req.body.picture = req.file.path
+  }
+
   insertPaymentMethod(req.body, (err, data) => {
     if(err) {
       return errorHandler(err, res)
@@ -56,6 +61,22 @@ exports.createPaymentMethod = (req, res) => {
 }
 
 exports.updatePaymentMethod = (req, res) => {
+  if(req.file){
+    req.body.picture = req.file.path
+    selectPaymentMethod(req.params, async (err, data) => {
+      if(err){
+        return errorHandler(err, res)
+      }
+      if(data.rows.length){
+        const [paymentMethod] = data.rows;
+        if(paymentMethod.picture){
+          console.log('file lama '+paymentMethod.picture)
+          console.log('file lama cut '+paymentMethod.picture.slice(57,88))
+          await cloudinary.uploader.destroy(paymentMethod.picture.slice(57,88))
+        }
+      }
+    })
+  }
   patchPaymentMethod(req.body, req.params, (err, data) => {
     if(err){
       return errorHandler(err, res)
@@ -64,7 +85,7 @@ exports.updatePaymentMethod = (req, res) => {
     if(data.rows.length === 0){
       return res.status(400).json({
         success: false,
-        message: "Reserved Seat doesn't exist"
+        message: "paymentMethod doesn't exist"
       })
     }
 
