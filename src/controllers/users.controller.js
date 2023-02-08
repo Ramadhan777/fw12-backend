@@ -98,7 +98,7 @@ exports.updateUser = async (req,  res) => {
     return res.status(200).json({
       success: true,
       message: "Profile Updated",
-      results : data.rows
+      results : data.rows[0]
     })
   })
 }
