@@ -40,8 +40,6 @@ exports.uploadImage = (req, res) => {
     })
   }
 
-  console.log('file baru ' + req.body.picture)
-
   uploadImage(req.body, req.userData.id, (error, data) => {
     if(error){
       return errorHandler(error, res)
@@ -57,7 +55,7 @@ exports.uploadImage = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "Profile Updated",
-      user : data.rows
+      results : data.rows
     })
   })
 }

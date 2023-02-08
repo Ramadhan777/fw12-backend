@@ -38,7 +38,7 @@ exports.readUser = (req, res) => {
 
     return res.status(200).json({
       success: true,
-      user: data.rows
+      results : data.rows
     })
   })
 }
@@ -51,7 +51,7 @@ exports.createUser = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User created successfully",
-      user: data.rows[0]
+      results : data.rows[0]
     })
     })
 }
@@ -78,7 +78,7 @@ exports.updateUser = async (req,  res) => {
       }
     })
   }
-  
+
   if(req.body.password){
     req.body.password = await argon.hash(req.body.password)
   }
@@ -98,7 +98,7 @@ exports.updateUser = async (req,  res) => {
     return res.status(200).json({
       success: true,
       message: "Profile Updated",
-      user : data.rows
+      results : data.rows
     })
   })
 }
@@ -119,7 +119,7 @@ exports.deleteUser = (req, res) => {
     return res.status(200).json({
       success: true,
       message: "User Deleted",
-      user: data.rows
+      results : data.rows
     })
   })
 }
